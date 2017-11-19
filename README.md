@@ -7,3 +7,6 @@ docker-compose exec wordpress bash
 apt-get update && apt-get install -y vim
 vim /var/www/html/wp-config.php
 define('WP_DEBUG', true);
+
+Add the following to a page
+[github_prs org="lshift"]
