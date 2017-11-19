@@ -13,7 +13,9 @@ Author URI: https://tevp.net
 */
 
 function github_prs_func( $atts ) {
-	return "org = {$atts['org']}";
+	$org = $atts['org'];
+	panegyric_create_tag($org);
+	return "org = $org";
 }
 add_shortcode( 'github_prs', 'github_prs_func' );
 
