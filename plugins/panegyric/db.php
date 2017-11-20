@@ -7,16 +7,19 @@ $prefix = $wpdb->prefix . 'panegyric';
 $tag_table = $prefix . "_tag_names";
 $org_table = $prefix . "_org";
 
-function table_exists($name) {
+function table_exists($name)
+{
     global $wpdb;
-    $rows = $wpdb->query( "SHOW TABLES LIKE '$name';" );
-    if ($rows == 1)
-        return TRUE;
-    else
-        return FALSE;
+    $rows = $wpdb->query("SHOW TABLES LIKE '$name';");
+    if ($rows == 1) {
+        return true;
+    } else {
+        return false;
+    }
 }
 
-function create_table($name, $sql) {
+function create_table($name, $sql)
+{
     if (!table_exists($name)) {
         global $wpdb;
         $charset_collate = $wpdb->get_charset_collate();
@@ -24,11 +27,12 @@ function create_table($name, $sql) {
     }
 }
 
-function panegyric_table_install() {
+function panegyric_table_install()
+{
     global $wpdb;
     global $panegyric_db_version;
 
-    require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+    require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
 
     create_table($tag_table, "
         name VARCHAR(255),
@@ -66,26 +70,29 @@ function panegyric_table_install() {
         FOREIGN KEY  (user) REFERENCES {$prefix}_users(username) ON DELETE CASCADE,
         FOREIGN KEY  (repo) REFERENCES {$prefix}_repo(id) ON DELETE CASCADE");
 
-    add_option( 'panegyric_db_version', $panegyric_db_version );
+    add_option('panegyric_db_version', $panegyric_db_version);
 }
 
-function panegyric_create_org($name) {
+function panegyric_create_org($name)
+{
     global $wpdb;
     global $org_table;
-    if ($wpdb->query( "select org from $org_table where org = '$name'" ) == 0) {
+    if ($wpdb->query("select org from $org_table where org = '$name'") == 0) {
         $wpdb->insert(
             $org_table,
             array(
                 'org' => $name,
                 'status' => 'not-checked',
-        ));
+            )
+        );
     }
 }
 
-function panegyric_create_tag($name) {
+function panegyric_create_tag($name)
+{
     global $wpdb;
     global $tag_table;
-    if ($wpdb->query( "select name from $tag_table where name = '$name'" ) == 0) {
+    if ($wpdb->query("select name from $tag_table where name = '$name'") == 0) {
         $wpdb->insert(
             $tag_table,
             array(
@@ -93,7 +100,8 @@ function panegyric_create_tag($name) {
                 'org_list' => $name,
                 'user_list' => '',
                 'exclude_user_list' => '',
-        ));
+            )
+        );
     }
     panegyric_create_org($name);
 }

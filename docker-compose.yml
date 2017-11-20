@@ -17,3 +17,10 @@ services:
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: example
+
+  formatter:
+    build:
+      dockerfile: Dockerfile.php-cs-fixer
+      context: ./plugins/panegyric
+    volumes:
+      - ./plugins/panegyric:/app
