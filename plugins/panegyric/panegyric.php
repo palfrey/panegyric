@@ -12,12 +12,16 @@ Version: 0.1
 Author URI: https://tevp.net
 */
 
-function github_prs_func( $atts ) {
-	$org = $atts['org'];
-	panegyric_create_tag($org);
-	return "org = $org";
+function panegyric_shortcodes_init()
+{
+	function github_prs_func( $atts ) {
+		$org = $atts['org'];
+		panegyric_create_tag($org);
+		return "org = $org";
+	}
+	add_shortcode( 'github_prs', 'github_prs_func' );
 }
-add_shortcode( 'github_prs', 'github_prs_func' );
+add_action('init', 'panegyric_shortcodes_init');
 
 define( 'PLUGIN_PATH', plugin_dir_path( __FILE__ ) );
 include( PLUGIN_PATH . 'db.php');
