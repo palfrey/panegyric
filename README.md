@@ -10,3 +10,8 @@ define('WP_DEBUG', true);
 
 Add the following to a page
 [github_prs org="lshift"]
+
+https://github.com/Dickurt/vscode-php-formatter
+brew install homebrew/php/php-cs-fixer
+
+https://www.sitepoint.com/using-wp_list_table-to-create-wordpress-admin-tables/
