@@ -4,7 +4,7 @@ if (! class_exists('WP_List_Table')) {
     require_once(ABSPATH . 'wp-admin/includes/class-wp-list-table.php');
 }
 
-class Customers_List extends WP_List_Table
+class Tag_Names_List extends WP_List_Table
 {
     /** Class constructor */
     public function __construct()
@@ -15,7 +15,6 @@ class Customers_List extends WP_List_Table
             'ajax'     => false //does this table support ajax?
         ]);
     }
-
 
     /**
      * Retrieve customers data from the database
@@ -39,29 +38,26 @@ class Customers_List extends WP_List_Table
         $sql .= " LIMIT $per_page";
         $sql .= ' OFFSET ' . ($page_number - 1) * $per_page;
 
-
         $result = $wpdb->get_results($sql, 'ARRAY_A');
 
         return $result;
     }
-
 
     /**
      * Delete a customer record.
      *
      * @param int $id customer ID
      */
-    public static function delete_customer($id)
+    public static function delete_tag_name($name)
     {
         global $wpdb;
 
         $wpdb->delete(
             "{$wpdb->prefix}panegyric_tag_names",
-            [ 'ID' => $id ],
+            [ 'name' => $name ],
             [ '%d' ]
         );
     }
-
 
     /**
      * Returns the count of records in the database.
@@ -77,13 +73,10 @@ class Customers_List extends WP_List_Table
         return $wpdb->get_var($sql);
     }
 
-
-    /** Text displayed when no customer data is available */
     public function no_items()
     {
-        _e('No customers avaliable.', 'sp');
+        _e('No tag names available. Try adding [github_prs org="&lt;your_org_name&gt;"] to a page', 'sp');
     }
-
 
     /**
      * Render a column when no column specific method exist.
@@ -119,7 +112,6 @@ class Customers_List extends WP_List_Table
         );
     }
 
-
     /**
      * Method for name column
      *
@@ -129,17 +121,16 @@ class Customers_List extends WP_List_Table
      */
     public function column_name($item)
     {
-        $delete_nonce = wp_create_nonce('sp_delete_customer');
+        $delete_nonce = wp_create_nonce('sp_delete_tag_name');
 
         $title = '<strong>' . $item['name'] . '</strong>';
 
         $actions = [
-            'delete' => sprintf('<a href="?page=%s&action=%s&customer=%s&_wpnonce=%s">Delete</a>', esc_attr($_REQUEST['page']), 'delete', absint($item['name']), $delete_nonce)
+            'delete' => sprintf('<a href="?page=%s&action=%s&customer=%s&_wpnonce=%s">Delete</a>', esc_attr($_REQUEST['page']), 'delete', $item['name'], $delete_nonce)
         ];
 
         return $title . $this->row_actions($actions);
     }
-
 
     /**
      *  Associative array of columns
@@ -157,7 +148,6 @@ class Customers_List extends WP_List_Table
 
         return $columns;
     }
-
 
     /**
      * Columns to make sortable.
@@ -188,7 +178,6 @@ class Customers_List extends WP_List_Table
         return $actions;
     }
 
-
     /**
      * Handles data query and filter, sorting, and pagination.
      */
@@ -213,20 +202,18 @@ class Customers_List extends WP_List_Table
 
     public function process_bulk_action()
     {
-
         //Detect when a bulk action is being triggered...
         if ('delete' === $this->current_action()) {
             // In our file that handles the request, verify the nonce.
             $nonce = esc_attr($_REQUEST['_wpnonce']);
 
-            if (! wp_verify_nonce($nonce, 'sp_delete_customer')) {
+            if (! wp_verify_nonce($nonce, 'sp_delete_tag_name')) {
                 die('Go get a life script kiddies');
             } else {
-                self::delete_customer(absint($_GET['customer']));
+                self::delete_tag_name($_GET['customer']);
 
                 // esc_url_raw() is used to prevent converting ampersand in url to "#038;"
-                // add_query_arg() return the current url
-                wp_redirect(esc_url_raw(add_query_arg()));
+                echo '<script>window.location="' . esc_url_raw(remove_query_arg('action')) .'"; </script>';
                 exit;
             }
         }
@@ -239,25 +226,23 @@ class Customers_List extends WP_List_Table
 
             // loop over the array of record IDs and delete them
             foreach ($delete_ids as $id) {
-                self::delete_customer($id);
+                self::delete_tag_name($id);
             }
 
             // esc_url_raw() is used to prevent converting ampersand in url to "#038;"
-            // add_query_arg() return the current url
-            wp_redirect(esc_url_raw(add_query_arg()));
+            echo '<script>window.location="' . esc_url_raw(remove_query_arg('action')) .'"; </script>';
             exit;
         }
     }
 }
-
 
 class Panegyric_Admin_Plugin
 {
     // class instance
     public static $instance;
 
-    // customer WP_List_Table object
-    public $customers_obj;
+    // tag names WP_List_Table object
+    public $tag_names_obj;
 
     // class constructor
     public function __construct()
@@ -289,7 +274,7 @@ class Panegyric_Admin_Plugin
      */
     public function plugin_settings_page()
     {
-        ?>
+        $this->tag_names_obj->prepare_items(); ?>
         <div class="wrap">
             <h2><?= esc_html(get_admin_page_title()); ?></h2>
 
@@ -298,9 +283,7 @@ class Panegyric_Admin_Plugin
                     <div id="post-body-content">
                         <div class="meta-box-sortables ui-sortable">
                             <form method="post">
-                                <?php
-                                $this->customers_obj->prepare_items();
-                                $this->customers_obj->display(); ?>
+                                <?php $this->tag_names_obj->display(); ?>
                             </form>
                         </div>
                     </div>
@@ -325,7 +308,7 @@ class Panegyric_Admin_Plugin
 
         add_screen_option($option, $args);
 
-        $this->customers_obj = new Customers_List();
+        $this->tag_names_obj = new Tag_Names_List();
     }
 
     /** Singleton instance */
