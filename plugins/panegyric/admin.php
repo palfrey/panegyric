@@ -44,6 +44,12 @@ class Panegyric_Admin_Plugin
      */
     public function plugin_settings_page()
     {
+        $action = isset($_GET['action']) ? $_GET['action'] : "";
+        switch ($action) {
+            case "edit":
+                ?>Edit something<?php
+                break;
+        }
         $this->tag_names_obj->prepare_items(); ?>
         <div class="wrap">
             <h2><?= esc_html(get_admin_page_title()); ?></h2>
