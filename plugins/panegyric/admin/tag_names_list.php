@@ -187,12 +187,16 @@ EOT;
      */
     public function prepare_items()
     {
+        $columns = $this->get_columns();
+        $hidden = array();
+        $sortable = $this->get_sortable_columns();
+        $this->_column_headers = array($columns, $hidden, $sortable);
         $this->_column_headers = $this->get_column_info();
 
         /** Process bulk action */
         $this->process_bulk_action();
 
-        $per_page     = $this->get_items_per_page('organisations_per_page', 5);
+        $per_page     = $this->get_items_per_page('tags_per_page', 5);
         $current_page = $this->get_pagenum();
         $total_items  = self::record_count();
 
@@ -238,4 +242,39 @@ EOT;
             exit;
         }
     }
+}
+
+function tag_names_display()
+{
+    $tag_names_obj = new Tag_Names_List();
+    $tag_names_obj->prepare_items(); ?>
+    <div class="wrap">
+        <h2><?= esc_html(get_admin_page_title()); ?></h2>
+
+        <div id="poststuff">
+            <div id="post-body" class="metabox-holder columns-2">
+                <div id="post-body-content">
+                    <div class="meta-box-sortables ui-sortable">
+                        <form method="post">
+                            <?php $tag_names_obj->display(); ?>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <br class="clear">
+        </div>
+    </div>
+    <?php
+}
+
+function tag_names_screen_options()
+{
+    $option = 'per_page';
+    $args   = [
+        'label'   => 'Tags',
+        'default' => 5,
+        'option'  => 'tags_per_page'
+    ];
+
+    add_screen_option($option, $args);
 }
