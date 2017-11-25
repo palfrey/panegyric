@@ -2,13 +2,15 @@
 
 class Organisations_List_Table extends WP_List_Table
 {
-    public function __construct()
+    public function __construct($tag_name)
     {
         parent::__construct(array(
           'singular'=> 'Organisation',
           'plural' => 'Organisations',
           'ajax'   => false
         ));
+        // WP_List_Table overrides __set so we need to do this crap
+        $this->_args['tag_name'] = $tag_name;
     }
 
     public function get_columns()
@@ -45,28 +47,33 @@ class Organisations_List_Table extends WP_List_Table
         $this->_column_headers = array($columns, $hidden, $sortable);
         $per_page     = $this->get_items_per_page('organisations_per_page', 5);
         $current_page = $this->get_pagenum();
-        $total_items  = self::record_count();
+        $total_items  = $this->record_count();
 
         $this->set_pagination_args([
             'total_items' => $total_items, //WE have to calculate the total number of items
             'per_page'    => $per_page //WE have to determine how many items to show on a page
         ]);
-        $this->items = self::get_organisations();
+        $this->items = $this->get_organisations();
     }
 
-    public static function record_count()
+    public function record_count()
     {
         global $wpdb;
         $sql = "SELECT COUNT(*) FROM {$wpdb->prefix}panegyric_org";
         return $wpdb->get_var($sql);
     }
 
-    public static function get_organisations()
+    public function get_organisations()
     {
         global $wpdb;
 
-        $sql = "SELECT * FROM {$wpdb->prefix}panegyric_org";
-
+        $sql = <<<EOT
+            SELECT org.*
+            FROM {$wpdb->prefix}panegyric_org org
+            JOIN {$wpdb->prefix}panegyric_org_tag tag_org ON tag_org.org = org.org
+            JOIN {$wpdb->prefix}panegyric_tag_names tn ON tn.name = tag_org.tag
+            WHERE tn.name = '{$this->_args['tag_name']}'
+EOT;
         if (! empty($_REQUEST['orderby'])) {
             $sql .= ' ORDER BY ' . esc_sql($_REQUEST['orderby']);
             $sql .= ! empty($_REQUEST['order']) ? ' ' . esc_sql($_REQUEST['order']) : ' ASC';
@@ -81,7 +88,7 @@ function info_list($name)
     ?>
     <h2>Editing <?= $name ?></h2>
     <a href="<?= esc_url_raw(remove_query_arg('action')) ?>">Return to main list</a><?php
-    $org_table = new Organisations_List_Table();
+    $org_table = new Organisations_List_Table($name);
     $org_table->prepare_items();
     $org_table->display();
 }
