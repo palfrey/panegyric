@@ -23,7 +23,15 @@ class Tag_Names_List extends WP_List_Table
     {
         global $wpdb;
 
-        $sql = "SELECT * FROM {$wpdb->prefix}panegyric_tag_names";
+        $sql = <<<EOT
+            SELECT tn.name, IFNULL(GROUP_CONCAT(org.org),"") as org_list, IFNULL(GROUP_CONCAT(users.username), "") as user_list
+            FROM {$wpdb->prefix}panegyric_tag_names tn
+            LEFT JOIN {$wpdb->prefix}panegyric_org_tag tag_org ON tag_org.tag = tn.name
+            LEFT JOIN {$wpdb->prefix}panegyric_org org ON tag_org.org = org.org
+            LEFT JOIN {$wpdb->prefix}panegyric_user_tag tag_users ON tag_users.tag = tn.name
+            LEFT JOIN {$wpdb->prefix}panegyric_users users ON tag_users.username = users.username
+            GROUP BY tn.name
+EOT;
 
         if (! empty($_REQUEST['orderby'])) {
             $sql .= ' ORDER BY ' . esc_sql($_REQUEST['orderby']);

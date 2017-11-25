@@ -17,7 +17,8 @@ function panegyric_shortcodes_init()
     function github_prs_func($atts)
     {
         $org = $atts['org'];
-        panegyric_create_tag($org);
+        $db = new DB_Migrator();
+        $db->create_tag($org);
         return "org = $org";
     }
     add_shortcode('github_prs', 'github_prs_func');
