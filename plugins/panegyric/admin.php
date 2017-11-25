@@ -4,6 +4,7 @@ if (!class_exists('WP_List_Table')) {
     require_once(ABSPATH . 'wp-admin/includes/class-wp-list-table.php');
 }
 
+include(PLUGIN_PATH . 'admin/info_list.php');
 include(PLUGIN_PATH . 'admin/tag_names_list.php');
 
 class Panegyric_Admin_Plugin
@@ -47,7 +48,8 @@ class Panegyric_Admin_Plugin
         $action = isset($_GET['action']) ? $_GET['action'] : "";
         switch ($action) {
             case "edit":
-                ?>Edit something<?php
+                info_list($_GET['customer']);
+                return;
                 break;
         }
         $this->tag_names_obj->prepare_items(); ?>
