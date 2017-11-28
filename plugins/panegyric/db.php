@@ -8,10 +8,8 @@ class DB_Migrator
     {
         global $wpdb;
         $this->prefix = $wpdb->prefix . 'panegyric';
-        $this->tag_table = $this->prefix . "_tag_names";
         $this->org_table = $this->prefix . "_org";
-        $this->tag_org_table = $this->prefix . "_org_tag";
-        $this->tag_user_table = $this->prefix . "_user_tag";
+        $this->user_table = $this->prefix . "_users";
     }
 
     public function table_exists($name)
@@ -38,15 +36,12 @@ class DB_Migrator
     {
         require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
 
-        $this->create_table($this->tag_table, "
-                name VARCHAR(255),
-                PRIMARY KEY  (name)");
         $this->create_table($this->org_table, "
                 org VARCHAR(39),
                 status ENUM('success', 'not-found', 'denied', 'not-checked'),
                 updated TIMESTAMP NULL,
                 PRIMARY KEY  (org)");
-        $this->create_table($this->prefix . "_users", "
+        $this->create_table($this->user_table, "
                 username VARCHAR(39),
                 org VARCHAR(39) NULL,
                 status ENUM('success', 'not-found', 'denied', 'not-checked'),
@@ -54,18 +49,6 @@ class DB_Migrator
                 prs_updated TIMESTAMP NULL,
                 PRIMARY KEY  (username),
                 FOREIGN KEY  (org) REFERENCES {$this->org_table}(org) ON DELETE CASCADE");
-        $this->create_table($this->tag_org_table, "
-                tag VARCHAR(255) NOT NULL,
-                org VARCHAR(39) NOT NULL,
-                PRIMARY KEY  (tag, org),
-                FOREIGN KEY  (tag) REFERENCES {$this->tag_table}(name) ON DELETE CASCADE,
-                FOREIGN KEY  (org) REFERENCES {$this->org_table}(org) ON DELETE CASCADE");
-        $this->create_table($this->tag_user_table, "
-                tag VARCHAR(255) NOT NULL,
-                username VARCHAR(39) NOT NULL,
-                PRIMARY KEY  (tag, username),
-                FOREIGN KEY  (tag) REFERENCES {$this->tag_table}(name) ON DELETE CASCADE,
-                FOREIGN KEY  (username) REFERENCES {$this->prefix}_users(username) ON DELETE CASCADE");
         $this->create_table($this->prefix . "_repo", "
                 id INT NOT NULL AUTO_INCREMENT,
                 name TEXT,
@@ -100,25 +83,23 @@ class DB_Migrator
         }
     }
 
-    public function create_tag($name)
+    public function create_user($name)
     {
         global $wpdb;
-        $this->create_org($name);
-        if ($wpdb->query("select name from {$this->tag_table} where name = '$name'") == 0) {
+        if ($wpdb->query("select username from {$this->user_table} where username = '$name'") == 0) {
             $wpdb->insert(
-                $this->tag_table,
+                $this->user_table,
                 array(
-                    'name' => $name,
-                )
-            );
-            $wpdb->insert(
-                $this->tag_org_table,
-                array(
-                    'tag' => $name,
-                    'org' => $name
+                    'username' => $name,
+                    'status' => 'not-checked',
                 )
             );
         }
+    }
+
+    public function get_prs($orgs, $users)
+    {
+        return array();
     }
 }
 

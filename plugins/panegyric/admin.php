@@ -5,7 +5,6 @@ if (!class_exists('WP_List_Table')) {
 }
 
 include(PLUGIN_PATH . 'admin/info_list.php');
-include(PLUGIN_PATH . 'admin/tag_names_list.php');
 
 class Panegyric_Admin_Plugin
 {
@@ -43,14 +42,7 @@ class Panegyric_Admin_Plugin
     public function plugin_settings_page()
     {
         $action = isset($_GET['action']) ? $_GET['action'] : "";
-        switch ($action) {
-            case "":
-                tag_names_display();
-                break;
-            case "edit":
-                info_list($_GET['customer']);
-                break;
-        }
+        info_list();
     }
 
     /**
@@ -59,14 +51,7 @@ class Panegyric_Admin_Plugin
     public function screen_option()
     {
         $action = isset($_GET['action']) ? $_GET['action'] : "";
-        switch ($action) {
-            case "":
-                tag_names_screen_options();
-                break;
-            case "edit":
-                info_list_screen_options();
-                break;
-        }
+        info_list_screen_options();
     }
 
     /** Singleton instance */
