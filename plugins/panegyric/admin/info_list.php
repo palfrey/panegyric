@@ -85,10 +85,36 @@ EOT;
 
 function info_list($name)
 {
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        print "Post: ";
+        print_r($_POST);
+    }
+
+    $org_table = new Organisations_List_Table($name);
+    $orgs = join(",", array_map(function($org) {
+        return $org['org'];
+    }, $org_table->get_organisations()));
+    $users = "";
     ?>
     <h2>Editing <?= $name ?></h2>
-    <a href="<?= esc_url_raw(remove_query_arg('action')) ?>">Return to main list</a><?php
-    $org_table = new Organisations_List_Table($name);
+    <a href="<?= esc_url_raw(remove_query_arg('action')) ?>">Return to all tags list</a>
+    <form action="<?= esc_url_raw(add_query_arg(array())) ?>" method="POST">
+        <table border="0">
+            <tr>
+                <td><label for="org_list">Organisation list (comma separated)</label></td>
+                <td><input name="org_list" type="text" value="<?= $orgs ?>" class="regular-text" /></td>
+            </tr>
+            <tr>
+                <td><label for="user_list">User list (comma separated)</label></td>
+                <td><input name="user_list" type="text" value="<?= $users ?>" class="regular-text" /></td>
+            </tr>
+            <tr>
+                <td colspan="2"><input type="submit" class="button" value="Save" /></td>
+            </tr>
+        </table>
+    </form>
+    <h3>Organisations</h3>
+    <?php
     $org_table->prepare_items();
     $org_table->display();
 }
