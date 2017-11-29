@@ -1,5 +1,6 @@
 <?php
 
+include(PLUGIN_PATH . 'admin/list_ajax.php');
 include(PLUGIN_PATH . 'admin/org_list.php');
 include(PLUGIN_PATH . 'admin/users_list.php');
 
@@ -20,6 +21,11 @@ function info_list()
     $users_table = new Users_List_Table();
     $users_table->prepare_items();
     $users_table->display();
+    ?>
+    <script language="javascript">
+        <?= list_ajax(); ?>
+    </script>
+    <?php
 }
 
 function info_list_screen_options()
