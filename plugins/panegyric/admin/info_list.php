@@ -1,15 +1,14 @@
 <?php
 
-include(PLUGIN_PATH . 'admin/list_ajax.php');
+include(PLUGIN_PATH . 'admin/ajax_list.php');
+include(PLUGIN_PATH . 'admin/list_js.php');
 include(PLUGIN_PATH . 'admin/org_list.php');
 include(PLUGIN_PATH . 'admin/users_list.php');
 
 function info_list()
 {
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        print "Post: ";
-        print_r($_POST);
-    } ?>
+    wp_nonce_field( 'ajax-custom-list-nonce', '_ajax_custom_list_nonce' );
+    ?>
     <h3>Organisations</h3>
     <?php
     $org_table = new Organisations_List_Table();
@@ -23,7 +22,7 @@ function info_list()
     $users_table->display();
     ?>
     <script language="javascript">
-        <?= list_ajax(); ?>
+        <?= list_ajax("organisation", "org"); ?>
     </script>
     <?php
 }
