@@ -1,12 +1,12 @@
 <?php
-class Users_List_Table extends WP_List_Table
+class Users_List_Table extends AJAX_List_Table
 {
     public function __construct()
     {
         parent::__construct(array(
           'singular'=> 'User',
           'plural' => 'Users',
-          'ajax'   => false
+          'ajax'   => true
         ));
     }
 
@@ -18,6 +18,15 @@ class Users_List_Table extends WP_List_Table
            'status'=>__('Status'),
            'updated'=>__('Updated'),
            'prs_updated'=>__('PRs Updated'),
+        );
+    }
+
+    public function get_sortable_columns()
+    {
+        return array(
+            'username' => array('org', true),
+            'org' => array('status', true),
+            'updated' => array('updated', true)
         );
     }
 
@@ -53,7 +62,9 @@ class Users_List_Table extends WP_List_Table
 
         $this->set_pagination_args([
             'total_items' => $total_items, //WE have to calculate the total number of items
-            'per_page'    => $per_page //WE have to determine how many items to show on a page
+            'per_page'    => $per_page, //WE have to determine how many items to show on a page
+            'orderby'   => $this->default_orderby('username'),
+            'order'     => $this->default_order()
         ]);
         $this->items = $this->get_users();
     }
