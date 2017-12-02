@@ -4,6 +4,7 @@ class Users_List_Table extends AJAX_List_Table
     public function __construct()
     {
         parent::__construct(array(
+          'table' => 'users',
           'singular'=> 'User',
           'plural' => 'Users',
           'ajax'   => true
@@ -30,11 +31,6 @@ class Users_List_Table extends AJAX_List_Table
         );
     }
 
-    public function no_items()
-    {
-        _e('No users found', 'sp');
-    }
-
     public function column_default($item, $column_name)
     {
         switch ($column_name) {
@@ -52,40 +48,6 @@ class Users_List_Table extends AJAX_List_Table
 
     public function prepare_items()
     {
-        $columns = $this->get_columns();
-        $hidden = array();
-        $sortable = $this->get_sortable_columns();
-        $this->_column_headers = array($columns, $hidden, $sortable);
-        $per_page     = $this->get_items_per_page('users_per_page', 5);
-        $current_page = $this->get_pagenum();
-        $total_items  = $this->record_count();
-
-        $this->set_pagination_args([
-            'total_items' => $total_items, //WE have to calculate the total number of items
-            'per_page'    => $per_page, //WE have to determine how many items to show on a page
-            'orderby'   => $this->default_orderby('username'),
-            'order'     => $this->default_order()
-        ]);
-        $this->items = $this->get_users();
-    }
-
-    public function record_count()
-    {
-        global $wpdb;
-        $sql = "SELECT COUNT(*) FROM {$wpdb->prefix}panegyric_users";
-        return $wpdb->get_var($sql);
-    }
-
-    public function get_users()
-    {
-        global $wpdb;
-
-        $sql = "SELECT * FROM {$wpdb->prefix}panegyric_users";
-        if (! empty($_REQUEST['orderby'])) {
-            $sql .= ' ORDER BY ' . esc_sql($_REQUEST['orderby']);
-            $sql .= ! empty($_REQUEST['order']) ? ' ' . esc_sql($_REQUEST['order']) : ' ASC';
-        }
-
-        return $wpdb->get_results($sql, 'ARRAY_A');
+        $this->prepare_items_core('username');
     }
 }
