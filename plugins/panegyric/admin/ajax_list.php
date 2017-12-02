@@ -1,16 +1,17 @@
 <?php
-function _ajax_fetch_custom_list_callback()
-{
-    $wp_list_table = new Organisations_List_Table();
-    $wp_list_table->ajax_response();
-}
-
-add_action('wp_ajax_ajax_fetch_custom_list', '_ajax_fetch_custom_list_callback');
-
 class AJAX_List_Table extends WP_List_Table
 {
+    public static function setup_ajax() {
+        add_action('wp_ajax_ajax_fetch_custom_list', function() {
+            $class = get_called_class();
+            $obj = new $class();
+            $obj->ajax_response();
+        });
+    }
+
     public function display()
     {
+        wp_nonce_field('ajax-custom-list-nonce', '_ajax_custom_list_nonce');
         echo '<input id="order" type="hidden" name="order" value="' . $this->_pagination_args['order'] . '" />';
         echo '<input id="orderby" type="hidden" name="orderby" value="' . $this->_pagination_args['orderby'] . '" />';
         parent::display();

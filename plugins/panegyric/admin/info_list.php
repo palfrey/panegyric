@@ -5,15 +5,23 @@ include(PLUGIN_PATH . 'admin/list_js.php');
 include(PLUGIN_PATH . 'admin/org_list.php');
 include(PLUGIN_PATH . 'admin/users_list.php');
 
+if( isset( $_GET[ 'tab' ] ) ) {
+    $active_tab = $_GET[ 'tab' ];
+}
+else {
+    $active_tab = "organisations";
+}
+
+if ($active_tab == 'organisations') {
+    Organisations_List_Table::setup_ajax();
+}
+else {
+    Users_List_Table::setup_ajax();
+}
+
 function info_list()
 {
-    if( isset( $_GET[ 'tab' ] ) ) {
-        $active_tab = $_GET[ 'tab' ];
-    }
-    else {
-        $active_tab = "organisations";
-    }
-    wp_nonce_field('ajax-custom-list-nonce', '_ajax_custom_list_nonce'); ?>
+    global $active_tab?>
     <h1>Panegyric Admin</h1>
     <div class="wrap">
         <h2 class="nav-tab-wrapper">

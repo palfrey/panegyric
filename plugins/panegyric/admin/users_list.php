@@ -25,8 +25,8 @@ class Users_List_Table extends AJAX_List_Table
     public function get_sortable_columns()
     {
         return array(
-            'username' => array('org', true),
-            'org' => array('status', true),
+            'username' => array('username', true),
+            'org' => array('org', true),
             'updated' => array('updated', true)
         );
     }
