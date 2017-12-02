@@ -59,8 +59,8 @@ class Organisations_List_Table extends AJAX_List_Table
         $this->set_pagination_args([
             'total_items' => $total_items,
             'per_page'    => $per_page,
-            $this->_args['orderby']   => $this->default_orderby('organisation'),
-            $this->_args['order']     => $this->default_order()
+            'orderby'   => $this->default_orderby('organisation'),
+            'order'     => $this->default_order()
         ]);
         $this->items = $this->get_organisations();
     }
@@ -77,9 +77,9 @@ class Organisations_List_Table extends AJAX_List_Table
         global $wpdb;
 
         $sql = "SELECT * FROM {$wpdb->prefix}panegyric_org";
-        if (! empty($_REQUEST[$this->_args['orderby']])) {
-            $sql .= ' ORDER BY ' . esc_sql($_REQUEST[$this->_args['orderby']]);
-            $sql .= ! empty($_REQUEST[$this->_args['order']]) ? ' ' . esc_sql($_REQUEST[$this->_args['order']]) : ' ASC';
+        if (! empty($_REQUEST['orderby'])) {
+            $sql .= ' ORDER BY ' . esc_sql($_REQUEST['orderby']);
+            $sql .= ! empty($_REQUEST['order']) ? ' ' . esc_sql($_REQUEST['order']) : ' ASC';
         }
         //print_r($sql);
 

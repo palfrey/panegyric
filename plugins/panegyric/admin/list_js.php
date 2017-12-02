@@ -1,6 +1,7 @@
 <?php
-function list_ajax($short, $default_column) {
-    // based off of https://blog.caercam.org/2014/04/03/a-way-to-implement-ajax-in-wp_list_table/ 
+function list_ajax($short, $default_column)
+{
+    // based off of https://blog.caercam.org/2014/04/03/a-way-to-implement-ajax-in-wp_list_table/
     $jscript = <<< EOT
     (function($) {
     
@@ -33,15 +34,15 @@ function list_ajax($short, $default_column) {
                 var query = this.search.substring( 1 );
                 
                 var data = {
-                    ${short}_paged: list.__query( query, '${short}_paged' ) || '1',
-                    ${short}_order: list.__query( query, '${short}_order' ) || 'asc',
-                    ${short}_orderby: list.__query( query, '${short}_orderby' ) || '${default_column}'
+                    paged: list.__query( query, 'paged' ) || '1',
+                    order: list.__query( query, 'order' ) || 'asc',
+                    orderby: list.__query( query, 'orderby' ) || '${default_column}'
                 };
                 list.update( data );
             });
     
             // Page number input
-            $('input[name=${short}_paged]').on('keyup', function(e) {
+            $('input[name=paged]').on('keyup', function(e) {
     
                 // If user hit enter, we don't want to submit the form
                 // We don't preventDefault() for all keys because it would
@@ -51,9 +52,9 @@ function list_ajax($short, $default_column) {
     
                 // This time we fetch the variables in inputs
                 var data = {
-                    ${short}_paged: parseInt( $('input[name=${short}_paged]').val() ) || '1',
-                    ${short}_order: $('input[name=${short}_order]').val() || 'asc',
-                    ${short}_orderby: $('input[name=${short}_orderby]').val() || '${default_column}'
+                    paged: parseInt( $('input[name=paged]').val() ) || '1',
+                    order: $('input[name=order]').val() || 'asc',
+                    orderby: $('input[name=orderby]').val() || '${default_column}'
                 };
     
                 // Now the timer comes to use: we wait half a second after

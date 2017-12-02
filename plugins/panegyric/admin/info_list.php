@@ -7,19 +7,17 @@ include(PLUGIN_PATH . 'admin/users_list.php');
 
 function info_list()
 {
-    wp_nonce_field( 'ajax-custom-list-nonce', '_ajax_custom_list_nonce' );
-    ?>
+    wp_nonce_field('ajax-custom-list-nonce', '_ajax_custom_list_nonce'); ?>
     <h3>Organisations</h3>
     <?php
     $org_table = new Organisations_List_Table();
     $org_table->prepare_items();
-    $org_table->display();
-    ?>
-    <h3>Users</h3>
+    $org_table->display(); ?>
+    <!-- <h3>Users</h3> -->
     <?php
-    $users_table = new Users_List_Table();
-    $users_table->prepare_items();
-    $users_table->display();
+    // $users_table = new Users_List_Table();
+    // $users_table->prepare_items();
+    // $users_table->display();
     ?>
     <script language="javascript">
         <?= list_ajax("organisation", "org"); ?>
