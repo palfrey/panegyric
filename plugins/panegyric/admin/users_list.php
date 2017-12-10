@@ -15,6 +15,7 @@ class Users_List_Table extends AJAX_List_Table
     {
         return $columns= array(
            'username' =>__('Username'),
+           'name' =>__('Name'),
            'org'=>__('Organisation'),
            'status'=>__('Status'),
            'updated'=>__('Updated'),
@@ -35,6 +36,7 @@ class Users_List_Table extends AJAX_List_Table
     {
         switch ($column_name) {
             case 'username':
+            case 'name':
             case 'org':
             case 'status':
                 return $item[ $column_name ];

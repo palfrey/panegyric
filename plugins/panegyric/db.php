@@ -43,6 +43,7 @@ class DB_Migrator
                 PRIMARY KEY  (org)");
         $this->create_table($this->user_table, "
                 username VARCHAR(39),
+                name TEXT NULL,
                 org VARCHAR(39) NULL,
                 status ENUM('success', 'not-found', 'denied', 'not-checked'),
                 updated TIMESTAMP NULL,
