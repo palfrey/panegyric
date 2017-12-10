@@ -44,6 +44,6 @@ class Organisations_List_Table extends AJAX_List_Table
 
     public function prepare_items()
     {
-        $this->prepare_items_core('organisation');
+        $this->prepare_items_core('org');
     }
 }

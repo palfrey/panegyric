@@ -1,10 +1,11 @@
 <?php
 class AJAX_List_Table extends WP_List_Table
 {
-    public static function setup_ajax()
+    public static function setup_ajax($classes)
     {
-        add_action('wp_ajax_ajax_fetch_custom_list', function () {
-            $class = get_called_class();
+        add_action('wp_ajax_ajax_fetch_custom_list', function () use ($classes) {
+            $short = $_REQUEST['kind'];
+            $class = $classes[$short];
             $obj = new $class();
             $obj->ajax_response();
         });

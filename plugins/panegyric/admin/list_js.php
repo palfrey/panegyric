@@ -75,7 +75,7 @@ function list_ajax($short, $default_column)
          * 
          * @param    object    data The data to pass through AJAX
          */
-        update: function( data ) {
+        update: function(data) {
             $.ajax({
                 // /wp-admin/admin-ajax.php
                 url: ajaxurl,
@@ -84,6 +84,7 @@ function list_ajax($short, $default_column)
                     {
                         _ajax_custom_list_nonce: $('#_ajax_custom_list_nonce').val(),
                         action: 'ajax_fetch_custom_list',
+                        kind: '${short}'
                     },
                     data
                 ),
