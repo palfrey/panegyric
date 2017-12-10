@@ -83,16 +83,20 @@ class DB_Migrator
         }
     }
 
-    public function create_user($name)
+    public function create_user($name, $org = null)
     {
         global $wpdb;
+        $values = array(
+            'username' => $name,
+            'status' => 'not-checked',
+        );
+        if (!is_null($org)) {
+            $values['org'] = $org;
+        }
         if ($wpdb->query("select username from {$this->user_table} where username = '$name'") == 0) {
             $wpdb->insert(
                 $this->user_table,
-                array(
-                    'username' => $name,
-                    'status' => 'not-checked',
-                )
+                $values
             );
         }
     }
@@ -100,6 +104,15 @@ class DB_Migrator
     public function get_prs($orgs, $users)
     {
         return array();
+    }
+
+    public function update_org($org, $users)
+    {
+        global $wpdb;
+        foreach ($users as $user) {
+            $this->create_user($user, $org);
+        }
+        $wpdb->query("update {$this->org_table} set updated=NOW() where org='$org';");
     }
 }
 
