@@ -5,17 +5,15 @@ include(PLUGIN_PATH . 'admin/list_js.php');
 include(PLUGIN_PATH . 'admin/org_list.php');
 include(PLUGIN_PATH . 'admin/users_list.php');
 
-if( isset( $_GET[ 'tab' ] ) ) {
+if (isset($_GET[ 'tab' ])) {
     $active_tab = $_GET[ 'tab' ];
-}
-else {
+} else {
     $active_tab = "organisations";
 }
 
 if ($active_tab == 'organisations') {
     Organisations_List_Table::setup_ajax();
-}
-else {
+} else {
     Users_List_Table::setup_ajax();
 }
 
@@ -30,23 +28,24 @@ function info_list()
         </h2>
     </div><!-- /.wrap -->
     <?php
-    if ($active_tab == 'organisations') { ?>
+    if ($active_tab == 'organisations') {
+        ?>
         <h3>Organisations</h3>
         <?php
         $org_table = new Organisations_List_Table();
         $org_table->prepare_items();
-        $org_table->display();?>
+        $org_table->display(); ?>
         <script language="javascript">
             <?= list_ajax("organisation", "org"); ?>
         </script>
         <?php
-    }
-    else if ($active_tab == 'users') { ?>
+    } elseif ($active_tab == 'users') {
+        ?>
         <h3>Users</h3>
         <?php
         $users_table = new Users_List_Table();
         $users_table->prepare_items();
-        $users_table->display();?>
+        $users_table->display(); ?>
         <script language="javascript">
             <?= list_ajax("users", "user"); ?>
         </script>
