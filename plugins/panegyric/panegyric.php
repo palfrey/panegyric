@@ -54,6 +54,7 @@ function panegyric_shortcodes_init()
     add_shortcode('github_prs', 'github_prs_func');
 }
 add_action('init', 'panegyric_shortcodes_init');
+add_action('admin_init', 'setup_ajax');
 
 define('PLUGIN_PATH', plugin_dir_path(__FILE__));
 include(PLUGIN_PATH . 'db.php');

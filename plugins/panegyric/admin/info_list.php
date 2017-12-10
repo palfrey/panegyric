@@ -11,12 +11,14 @@ if (isset($_GET[ 'tab' ])) {
     $active_tab = "organisations";
 }
 
-$classes = array(
-    "organisation" => "Organisations_List_Table",
-    "users" => "Users_List_Table"
-);
-
-AJAX_List_Table::setup_ajax($classes);
+function setup_ajax()
+{
+    $classes = array(
+        "organisation" => "Organisations_List_Table",
+        "users" => "Users_List_Table"
+    );
+    AJAX_List_Table::setup_ajax($classes);
+}
 
 function info_list()
 {
