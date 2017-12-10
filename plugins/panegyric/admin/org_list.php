@@ -58,14 +58,20 @@ class Organisations_List_Table extends AJAX_List_Table
         curl_setopt($ch, CURLOPT_URL, "https://api.github.com/orgs/${org}/members");
         curl_setopt($ch, CURLOPT_USERAGENT, 'Panegyric');
         $json = curl_exec($ch);
-        curl_close($ch);
-        $obj = json_decode($json);
-
-        $users = array();
-        foreach ($obj as $user) {
-            array_push($users, $user->login);
-        }
         $db = new DB_Migrator();
-        $db->update_org($org, $users);
+        $info = curl_getinfo($ch);
+        if ($info['http_code'] == 404) {
+            $db->org_missing($org);
+        } elseif ($info['http_code'] == 200) {
+            $obj = json_decode($json);
+            $users = array();
+            foreach ($obj as $user) {
+                array_push($users, $user->login);
+            }
+            $db->update_org($org, $users);
+        } else {
+            print_r($info);
+        }
+        curl_close($ch);
     }
 }

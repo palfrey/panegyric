@@ -112,7 +112,13 @@ class DB_Migrator
         foreach ($users as $user) {
             $this->create_user($user, $org);
         }
-        $wpdb->query("update {$this->org_table} set updated=NOW() where org='$org';");
+        $wpdb->query("update {$this->org_table} set updated=NOW(), status='success' where org='$org';");
+    }
+
+    public function org_missing($org)
+    {
+        global $wpdb;
+        $wpdb->query("update {$this->org_table} set updated=NOW(), status='not-found' where org='$org';");
     }
 }
 
