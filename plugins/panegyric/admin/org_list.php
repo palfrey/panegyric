@@ -16,8 +16,7 @@ class Organisations_List_Table extends AJAX_List_Table
         return $columns= array(
            'org'=>__('Organisation'),
            'status'=>__('Status'),
-           'updated'=>__('Updated'),
-           'update'=>__('Update')
+           'updated'=>__('Updated')
         );
     }
 
@@ -37,9 +36,8 @@ class Organisations_List_Table extends AJAX_List_Table
             case 'status':
                 return $item[ $column_name ];
             case 'updated':
-                return $item[ $column_name ] ?: "Never";
-            case 'update':
-                return "<a href=\"#\" class=\"update-link\" data-id=\"{$item['org']}\">Update now</a>";
+                $date = $item[ $column_name ] ?: "Never";
+                return "<a href=\"#\" class=\"update-link\" data-id=\"{$item['org']}\">{$date}</a>";
             default:
                 return print_r($item, true); // Show the whole array for troubleshooting purposes
         }
