@@ -68,12 +68,14 @@ function list_ajax($short, $default_column)
                 }, delay);
             });
 
-            $('a.update-link').on('click', function(e) {
+            $('a.update-link,a.updated-link,a.prs_updated-link').on('click', function(e) {
                 var id = $(this).data('id');
+                var kind = $(this).data('kind');
                 var data = {
                     paged: parseInt( $('input[name=paged]').val() ) || '1',
                     order: $('input[name=order]').val() || 'asc',
                     orderby: $('input[name=orderby]').val() || '${default_column}',
+                    update_kind: kind,
                     update_id: id,
                 };
                 list.update(data);

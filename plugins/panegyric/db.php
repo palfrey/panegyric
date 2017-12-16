@@ -121,6 +121,18 @@ class DB_Migrator
         global $wpdb;
         $wpdb->query("update {$this->org_table} set updated=NOW(), status='not-found' where org='$org';");
     }
+
+    public function set_user_name($username, $name)
+    {
+        global $wpdb;
+        $wpdb->query($wpdb->prepare("update {$this->user_table} set updated=NOW(), status='success', name=%s where username=%s;", $name, $username));
+    }
+
+    public function user_missing($username)
+    {
+        global $wpdb;
+        $wpdb->query("update {$this->user_table} set updated=NOW(), status='not-found' where username='$username';");
+    }
 }
 
 function panegyric_table_install()

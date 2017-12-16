@@ -50,11 +50,7 @@ class Organisations_List_Table extends AJAX_List_Table
 
     public function update_item($org)
     {
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_URL, "https://api.github.com/orgs/${org}/members");
-        curl_setopt($ch, CURLOPT_USERAGENT, 'Panegyric');
+        $ch = $this->curl_get("https://api.github.com/orgs/${org}/members");
         $json = curl_exec($ch);
         $db = new DB_Migrator();
         $info = curl_getinfo($ch);

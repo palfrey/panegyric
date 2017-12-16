@@ -73,6 +73,16 @@ class AJAX_List_Table extends WP_List_Table
         $this->items = $this->get_records();
     }
 
+    public function curl_get($url)
+    {
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_USERAGENT, 'Panegyric');
+        return $ch;
+    }
+
     public function ajax_response()
     {
         check_ajax_referer('ajax-custom-list-nonce', '_ajax_custom_list_nonce');
