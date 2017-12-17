@@ -55,9 +55,8 @@ class Users_List_Table extends AJAX_List_Table
         $this->prepare_items_core('username');
     }
 
-    public function update_item($id)
+    public function update_item($kind, $id)
     {
-        $kind = $_REQUEST['update_kind'];
         switch ($kind) {
             case 'user':
                 $ch = $this->curl_get("https://api.github.com/users/$id");

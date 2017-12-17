@@ -90,7 +90,7 @@ class AJAX_List_Table extends WP_List_Table
         ob_start();
 
         if (! empty($_REQUEST['update_id'])) {
-            $this->update_item($_REQUEST['update_id']);
+            $this->update_item($_REQUEST['update_kind'], $_REQUEST['update_id']);
         }
         $this->prepare_items();
 

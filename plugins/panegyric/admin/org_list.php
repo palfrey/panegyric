@@ -48,7 +48,7 @@ class Organisations_List_Table extends AJAX_List_Table
         $this->prepare_items_core('org');
     }
 
-    public function update_item($org)
+    public function update_item($kind, $org)
     {
         $ch = $this->curl_get("https://api.github.com/orgs/${org}/members");
         $json = curl_exec($ch);
