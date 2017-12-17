@@ -4,6 +4,7 @@ include(PLUGIN_PATH . 'admin/ajax_list.php');
 include(PLUGIN_PATH . 'admin/list_js.php');
 include(PLUGIN_PATH . 'admin/org_list.php');
 include(PLUGIN_PATH . 'admin/users_list.php');
+include(PLUGIN_PATH . 'admin/prs_list.php');
 
 if (isset($_GET[ 'tab' ])) {
     $active_tab = $_GET[ 'tab' ];
@@ -15,7 +16,8 @@ function setup_ajax()
 {
     $classes = array(
         "organisation" => "Organisations_List_Table",
-        "users" => "Users_List_Table"
+        "users" => "Users_List_Table",
+        "prs" => "PullRequests_List_Table"
     );
     AJAX_List_Table::setup_ajax($classes);
 }
@@ -28,6 +30,7 @@ function info_list()
         <h2 class="nav-tab-wrapper">
             <a href="?page=panegyric_admin&amp;tab=organisations" class="nav-tab <?php echo $active_tab == 'organisations' ? 'nav-tab-active' : ''; ?>">Organisations</a>
             <a href="?page=panegyric_admin&amp;tab=users" class="nav-tab <?php echo $active_tab == 'users' ? 'nav-tab-active' : ''; ?>">Users</a>
+            <a href="?page=panegyric_admin&amp;tab=prs" class="nav-tab <?php echo $active_tab == 'prs' ? 'nav-tab-active' : ''; ?>">Pull Requests</a>
         </h2>
     </div><!-- /.wrap -->
     <?php
@@ -53,6 +56,13 @@ function info_list()
             <?= list_ajax("users", "user"); ?>
         </script>
         <?php
+    } elseif ($active_tab == 'prs') {
+        ?>
+        <h3>Users</h3>
+        <?php
+        $prs_table = new PullRequests_List_Table();
+        $prs_table->prepare_items();
+        $prs_table->display();
     }
 }
 
