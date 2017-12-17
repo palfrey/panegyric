@@ -62,10 +62,28 @@ function panegyric_shortcodes_init()
 }
 add_action('init', 'panegyric_shortcodes_init');
 add_action('admin_init', 'setup_ajax');
+add_action('panegyric_update', 'panegyric_update');
 
 define('PLUGIN_PATH', plugin_dir_path(__FILE__));
 include(PLUGIN_PATH . 'db.php');
 include(PLUGIN_PATH . 'admin.php');
+include(PLUGIN_PATH . 'admin/cron.php');
 
-register_activation_hook(__FILE__, 'panegyric_table_install');
+function panegyric_activate()
+{
+    panegyric_table_install();
+    if (! wp_next_scheduled('panegyric_update')) {
+        wp_schedule_event(time(), 'daily', 'panegyric_update');
+    }
+}
+
+function panegyric_deactivate()
+{
+    $timestamp = wp_next_scheduled('panegyric_update');
+    wp_unschedule_event($timestamp, 'panegyric_update');
+}
+
+register_activation_hook(__FILE__, 'panegyric_activate');
+register_deactivation_hook(__FILE__, 'panegyric_deactivate');
+
 //register_uninstall hook(__FILE__,'wptuts_uninstall_plugin');
