@@ -12,6 +12,9 @@ Version: 0.1
 Author URI: https://tevp.net
 */
 
+//ini_set('display_errors', 'On');
+//error_reporting(E_ALL);
+
 function comma_split($instr)
 {
     // using strlen trick from http://php.net/manual/en/function.explode.php#111650
@@ -42,12 +45,16 @@ function panegyric_shortcodes_init()
         if (array_key_exists("limit", $atts)) {
             $limit = $atts["limit"];
         } else {
-            $limit = 0;
+            $limit = 10;
         }
-        $prs = $db->get_prs($orgs, $users);
-        $outstr = 'Total merged pull requests: '. count($prs) . '<table border="1">';
+        $prs = $db->get_prs($orgs, $users, $limit);
+        $outstr = '<table border="1">';
         foreach ($prs as $pr) {
-            $outstr .= "<tr><td>${pr}</td></tr>";
+            $when = DateTime::createFromFormat('Y-m-d H:i:s', $pr->when);
+            $outstr .= "<tr><td>
+                {$when->format('Y-m-d')}: \"<a href=\"{$pr->pr_url}\">{$pr->title}</a>\"
+                was done by <a href=\"https://github.com/{$pr->username}\">{$pr->name}</a>
+                for <a href=\"{$pr->repo_url}\">{$pr->repo_name}</a></td></tr>";
         }
         return $outstr . "</table>";
     }
