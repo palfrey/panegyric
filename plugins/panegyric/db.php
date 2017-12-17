@@ -2,7 +2,7 @@
 
 class DB_Migrator
 {
-    public static $db_version = '1.0';
+    const db_version = '1.0';
 
     public function __construct()
     {
@@ -72,7 +72,7 @@ class DB_Migrator
                 FOREIGN KEY  (user) REFERENCES {$this->prefix}_users(username) ON DELETE CASCADE,
                 FOREIGN KEY  (repo) REFERENCES {$this->prefix}_repo(id) ON DELETE CASCADE");
 
-        add_option('panegyric_db_version', $this->db_version);
+        add_option('panegyric_db_version', $this::db_version);
     }
 
     public function create_org($name)
