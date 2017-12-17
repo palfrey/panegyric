@@ -74,6 +74,40 @@ class Users_List_Table extends AJAX_List_Table
                 }
                 curl_close($ch);
                 break;
+            case 'prs':
+                $query = "is:pr author:$id is:public -user:$id is:merged";
+                $query = str_replace(" ", "+", $query);
+                $ch = $this->curl_get("https://api.github.com/search/issues?&q=$query&sort=created&order=desc");
+                $json = curl_exec($ch);
+                $info = curl_getinfo($ch);
+                $db = new DB_Migrator();
+                if ($info['http_code'] == 200) {
+                    $obj = json_decode($json);
+                    foreach ($obj->items as $pr) {
+                        if ($db->get_pr_by_url($pr->html_url) != null) {
+                            continue;
+                        }
+                        $repo = $db->get_repo_by_url($pr->repository_url);
+                        if ($repo == null) {
+                            $rch = $this->curl_get($pr->repository_url);
+                            $rjson = curl_exec($rch);
+                            $rinfo = curl_getinfo($rch);
+                            if ($rinfo['http_code'] == 200) {
+                                $db->add_repo(json_decode($rjson));
+                                $repo = $db->get_repo_by_url($pr->repository_url);
+                            } else {
+                                print("Repo get failure for {$pr->repository_url}");
+                                print_r($rinfo);
+                                continue;
+                            }
+                        }
+                        $db->add_pr($pr, $repo, $id);
+                    }
+                    $db->prs_updated($id);
+                } else {
+                    print_r($info);
+                }
+                break;
             default:
                 print "Don't know how to update $kind";
         }

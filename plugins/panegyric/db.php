@@ -10,6 +10,8 @@ class DB_Migrator
         $this->prefix = $wpdb->prefix . 'panegyric';
         $this->org_table = $this->prefix . "_org";
         $this->user_table = $this->prefix . "_users";
+        $this->repo_table = $this->prefix . "_repo";
+        $this->pr_table = $this->prefix . "_prs";
     }
 
     public function table_exists($name)
@@ -50,19 +52,22 @@ class DB_Migrator
                 prs_updated TIMESTAMP NULL,
                 PRIMARY KEY  (username),
                 FOREIGN KEY  (org) REFERENCES {$this->org_table}(org) ON DELETE CASCADE");
-        $this->create_table($this->prefix . "_repo", "
+        $this->create_table($this->repo_table, "
                 id INT NOT NULL AUTO_INCREMENT,
                 name TEXT,
                 description TEXT,
                 url TEXT,
+                html_url TEXT,
+                owner VARCHAR(39),
                 updated TIMESTAMP NULL,
                 PRIMARY KEY  (id)");
-        $this->create_table($this->prefix . "_prs", "
+        $this->create_table($this->pr_table, "
                 id INT NOT NULL AUTO_INCREMENT,
                 url TEXT,
                 user VARCHAR(39) NOT NULL,
                 repo INT NOT NULL,
                 title TEXT NOT NULL,
+                `when` TIMESTAMP NULL,
                 PRIMARY KEY  (id),
                 FOREIGN KEY  (user) REFERENCES {$this->prefix}_users(username) ON DELETE CASCADE,
                 FOREIGN KEY  (repo) REFERENCES {$this->prefix}_repo(id) ON DELETE CASCADE");
@@ -132,6 +137,37 @@ class DB_Migrator
     {
         global $wpdb;
         $wpdb->query("update {$this->user_table} set updated=NOW(), status='not-found' where username='$username';");
+    }
+
+    public function get_repo_by_url($url)
+    {
+        global $wpdb;
+        return $wpdb->get_row("select * from {$this->repo_table} where url = '$url'");
+    }
+
+    public function add_repo($repo)
+    {
+        global $wpdb;
+        $wpdb->query($wpdb->prepare("insert into {$this->repo_table} (name, description, url, html_url, owner, updated) values(%s,%s,%s,%s,%s, NOW());", $repo->name, $repo->description, $repo->url, $repo->html_url, $repo->owner->login));
+    }
+
+    public function get_pr_by_url($url)
+    {
+        global $wpdb;
+        return $wpdb->get_row("select * from {$this->pr_table} where url = '$url'");
+    }
+
+    public function add_pr($pr, $repo, $username)
+    {
+        global $wpdb;
+        $when = DateTime::createFromFormat(DateTime::ATOM, $pr->updated_at);
+        $wpdb->query($wpdb->prepare("insert into {$this->pr_table} (url, user, repo, title, `when`) values(%s, %s, %d, %s, FROM_UNIXTIME(%d))", $pr->html_url, $username, $repo->id, $pr->title, $when->getTimestamp()));
+    }
+
+    public function prs_updated($username)
+    {
+        global $wpdb;
+        $wpdb->query("update {$this->user_table} set prs_updated=NOW() where username='$username';");
     }
 }
 
