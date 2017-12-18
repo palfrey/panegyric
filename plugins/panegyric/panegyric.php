@@ -12,8 +12,8 @@ Version: 0.1
 Author URI: https://tevp.net
 */
 
-//ini_set('display_errors', 'On');
-//error_reporting(E_ALL);
+ini_set('display_errors', 'On');
+error_reporting(E_ALL);
 
 function comma_split($instr)
 {

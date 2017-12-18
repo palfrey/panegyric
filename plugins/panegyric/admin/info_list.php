@@ -14,6 +14,9 @@ if (isset($_GET[ 'tab' ])) {
 
 function setup_ajax()
 {
+    // HACK: Workaround for "Undefined index: hook_suffix" in WP_Screen
+    $GLOBALS['hook_suffix'] = '';
+
     $classes = array(
         "organisation" => "Organisations_List_Table",
         "users" => "Users_List_Table",
