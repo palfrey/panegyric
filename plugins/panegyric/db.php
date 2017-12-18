@@ -110,7 +110,7 @@ class DB_Migrator
     public function get_prs($orgs, $users, $limit)
     {
         global $wpdb;
-        $sql = "SELECT *, r.url as repo_url, pr.url as pr_url, r.name as repo_name
+        $sql = "SELECT *, r.html_url as repo_url, pr.url as pr_url, r.name as repo_name
                 FROM {$this->pr_table} pr
                 JOIN {$this->repo_table} r on pr.repo = r.id
                 JOIN {$this->user_table} u on pr.user = u.username
