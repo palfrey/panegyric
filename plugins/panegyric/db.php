@@ -67,7 +67,7 @@ class DB_Migrator
                 user VARCHAR(39) NOT NULL,
                 repo INT NOT NULL,
                 title TEXT NOT NULL,
-                `when` TIMESTAMP NULL,
+                updated_at TIMESTAMP NULL,
                 PRIMARY KEY  (id),
                 FOREIGN KEY  (user) REFERENCES {$this->prefix}_users(username) ON DELETE CASCADE,
                 FOREIGN KEY  (repo) REFERENCES {$this->prefix}_repo(id) ON DELETE CASCADE");
@@ -114,7 +114,7 @@ class DB_Migrator
                 FROM {$this->pr_table} pr
                 JOIN {$this->repo_table} r on pr.repo = r.id
                 JOIN {$this->user_table} u on pr.user = u.username
-                ORDER BY pr.`when` DESC
+                ORDER BY pr.updated_at DESC
                 LIMIT $limit";
         return $wpdb->get_results($sql);
     }
@@ -167,8 +167,8 @@ class DB_Migrator
     public function add_pr($pr, $repo, $username)
     {
         global $wpdb;
-        $when = DateTime::createFromFormat(DateTime::ATOM, $pr->updated_at);
-        $wpdb->query($wpdb->prepare("insert into {$this->pr_table} (url, user, repo, title, `when`) values(%s, %s, %d, %s, FROM_UNIXTIME(%d))", $pr->html_url, $username, $repo->id, $pr->title, $when->getTimestamp()));
+        $updated_at = DateTime::createFromFormat(DateTime::ATOM, $pr->updated_at);
+        $wpdb->query($wpdb->prepare("insert into {$this->pr_table} (url, user, repo, title, updated_at) values(%s, %s, %d, %s, FROM_UNIXTIME(%d))", $pr->html_url, $username, $repo->id, $pr->title, $updated_at->getTimestamp()));
     }
 
     public function prs_updated($username)

@@ -17,7 +17,7 @@ class PullRequests_List_Table extends AJAX_List_Table
            'name' =>__('Repository'),
            'title' =>__('What'),
            'user' =>__('Who'),
-           'when' =>__('When'),
+           'updated_at' =>__('When'),
         );
     }
 
@@ -27,7 +27,7 @@ class PullRequests_List_Table extends AJAX_List_Table
             'name' => array('name', true),
             'user' => array('user', true),
             'title' => array('title', true),
-            'when' => array('%60when%60', true)
+            'updated_at' => array('updated_at', true)
         );
     }
 
@@ -48,7 +48,7 @@ class PullRequests_List_Table extends AJAX_List_Table
     {
         switch ($column_name) {
             case 'user':
-            case 'when':
+            case 'updated_at':
                 return $item[ $column_name ];
             case 'name':
                 return "<a href=\"{$item['repo_url']}\">{$item['name']}</a>";

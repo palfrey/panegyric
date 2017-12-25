@@ -50,9 +50,9 @@ function panegyric_shortcodes_init()
         $prs = $db->get_prs($orgs, $users, $limit);
         $outstr = '<ul class="pangegyric-list">';
         foreach ($prs as $pr) {
-            $when = DateTime::createFromFormat('Y-m-d H:i:s', $pr->when);
+            $updated_at = DateTime::createFromFormat('Y-m-d H:i:s', $pr->updated_at);
             $outstr .= "<li class=\"panegyric-item\">
-                {$when->format('Y-m-d')}: \"<a href=\"{$pr->pr_url}\">{$pr->title}</a>\"
+                {$updated_at->format('Y-m-d')}: \"<a href=\"{$pr->pr_url}\">{$pr->title}</a>\"
                 was done by <a href=\"https://github.com/{$pr->username}\">{$pr->name}</a>
                 for <a href=\"{$pr->repo_url}\">{$pr->repo_name}</a></li>";
         }
