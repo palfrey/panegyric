@@ -48,15 +48,15 @@ function panegyric_shortcodes_init()
             $limit = 10;
         }
         $prs = $db->get_prs($orgs, $users, $limit);
-        $outstr = '<table border="1">';
+        $outstr = '<ul class="pangegyric-list">';
         foreach ($prs as $pr) {
             $when = DateTime::createFromFormat('Y-m-d H:i:s', $pr->when);
-            $outstr .= "<tr><td>
+            $outstr .= "<li class=\"panegyric-item\">
                 {$when->format('Y-m-d')}: \"<a href=\"{$pr->pr_url}\">{$pr->title}</a>\"
                 was done by <a href=\"https://github.com/{$pr->username}\">{$pr->name}</a>
-                for <a href=\"{$pr->repo_url}\">{$pr->repo_name}</a></td></tr>";
+                for <a href=\"{$pr->repo_url}\">{$pr->repo_name}</a></li>";
         }
-        return $outstr . "</table>";
+        return $outstr . "</ul>";
     }
     add_shortcode('github_prs', 'github_prs_func');
 }
