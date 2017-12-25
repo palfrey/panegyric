@@ -37,7 +37,7 @@ class Organisations_List_Table extends AJAX_List_Table
                 return $item[ $column_name ];
             case 'updated':
                 $date = $item[ $column_name ] ?: "Never";
-                return "<a href=\"#\" class=\"update-link\" data-id=\"{$item['org']}\">{$date}</a>";
+                return "<a href=\"#\" class=\"update-link\" data-kind=\"org\" data-id=\"{$item['org']}\">{$date}</a>";
             default:
                 return print_r($item, true); // Show the whole array for troubleshooting purposes
         }
