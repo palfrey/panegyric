@@ -78,7 +78,7 @@ class DB_Migrator
     public function create_org($name)
     {
         global $wpdb;
-        if ($wpdb->query("select org from {$this->org_table} where org = '$name'") == 0) {
+        if ($wpdb->query($wpdb->prepare("select org from {$this->org_table} where org = %s", $name)) == 0) {
             $wpdb->insert(
                 $this->org_table,
                 array(
@@ -99,7 +99,7 @@ class DB_Migrator
         if (!is_null($org)) {
             $values['org'] = $org;
         }
-        if ($wpdb->query("select username from {$this->user_table} where username = '$name'") == 0) {
+        if ($wpdb->query($wpdb->prepare("select username from {$this->user_table} where username = %s", $name)) == 0) {
             $wpdb->insert(
                 $this->user_table,
                 $values
@@ -110,30 +110,30 @@ class DB_Migrator
     public function get_prs($orgs, $users, $limit)
     {
         global $wpdb;
-        $sql = "SELECT username from {$this->user_table} WHERE FIND_IN_SET(org, '" . implode(",", $orgs) . "')";
+        $sql = $wpdb->prepare("SELECT username from {$this->user_table} WHERE FIND_IN_SET(org, %s)", implode(",", $orgs));
         $extra_users = $wpdb->get_col($sql);
         $users = array_merge($users, $extra_users);
 
-        $sql = "SELECT *, r.html_url as repo_url, pr.url as pr_url, r.name as repo_name
+        $sql = $wpdb->prepare("SELECT *, r.html_url as repo_url, pr.url as pr_url, r.name as repo_name
                 FROM {$this->pr_table} pr
                 JOIN {$this->repo_table} r on pr.repo = r.id
                 JOIN {$this->user_table} u on pr.user = u.username
-                WHERE FIND_IN_SET(u.username, '" . implode(",", $users) . "') AND
-                (NOT FIND_IN_SET(r.owner, '" . implode(",", array_merge($users, $orgs)) . "'))
+                WHERE FIND_IN_SET(u.username, %s) AND
+                (NOT FIND_IN_SET(r.owner, %s))
                 ORDER BY pr.updated_at DESC
-                LIMIT $limit";
+                LIMIT %d", implode(",", $users), implode(",", array_merge($users, $orgs)), $limit);
         return $wpdb->get_results($sql);
     }
 
     public function no_updates($orgs, $users)
     {
         global $wpdb;
-        $sql = "SELECT username from {$this->user_table} WHERE (updated IS NULL OR prs_updated IS NULL) AND
-                (FIND_IN_SET(username, '" . implode(",", $users) . "') OR
-                FIND_IN_SET(org, '" . implode(",", $orgs) . "'))
+        $sql = $wpdb->prepare("SELECT username from {$this->user_table} WHERE (updated IS NULL OR prs_updated IS NULL) AND
+                (FIND_IN_SET(username, %s) OR
+                FIND_IN_SET(org, %s))
                 UNION
                 SELECT org from {$this->org_table} WHERE updated IS NULL AND
-                FIND_IN_SET(org, '" . implode(",", $orgs) . "')";
+                FIND_IN_SET(org, %s)", implode(",", $users), implode(",", $orgs), implode(",", $orgs));
         $missing_users = $wpdb->get_col($sql);
         return $missing_users;
     }
@@ -144,13 +144,13 @@ class DB_Migrator
         foreach ($users as $user) {
             $this->create_user($user, $org);
         }
-        $wpdb->query("update {$this->org_table} set updated=NOW(), status='success' where org='$org';");
+        $wpdb->query($wpdb->prepare("update {$this->org_table} set updated=NOW(), status='success' where org=%s;", $org));
     }
 
     public function org_missing($org)
     {
         global $wpdb;
-        $wpdb->query("update {$this->org_table} set updated=NOW(), status='not-found' where org='$org';");
+        $wpdb->query($wpdb->prepare("update {$this->org_table} set updated=NOW(), status='not-found' where org=%s;", $org));
     }
 
     public function set_user_name($username, $name)
@@ -162,37 +162,37 @@ class DB_Migrator
     public function user_missing($username)
     {
         global $wpdb;
-        $wpdb->query("update {$this->user_table} set updated=NOW(), status='not-found' where username='$username';");
+        $wpdb->query($wpdb->prepare("update {$this->user_table} set updated=NOW(), status='not-found' where username=%s;", $username));
     }
 
     public function delete_user($username)
     {
         global $wpdb;
-        $wpdb->query("delete from {$this->user_table} WHERE username='$username';");
+        $wpdb->query($wpdb->prepare("delete from {$this->user_table} WHERE username=%s;", $username));
     }
 
     public function delete_org($name)
     {
         global $wpdb;
-        $wpdb->query("delete from {$this->org_table} WHERE org='$name';");
+        $wpdb->query($wpdb->prepare("delete from {$this->org_table} WHERE org=%s;", $name));
     }
 
     public function get_repo_by_url($url)
     {
         global $wpdb;
-        return $wpdb->get_row("select * from {$this->repo_table} where url = '$url'");
+        return $wpdb->get_row($wpdb->prepare("select * from {$this->repo_table} where url = %s", $url));
     }
 
     public function add_repo($repo)
     {
         global $wpdb;
-        $wpdb->query($wpdb->prepare("insert into {$this->repo_table} (name, description, url, html_url, owner, updated) values(%s,%s,%s,%s,%s, NOW());", $repo->name, $repo->description, $repo->url, $repo->html_url, $repo->owner->login));
+        $wpdb->query($wpdb->prepare("insert into {$this->repo_table} (name, description, url, html_url, owner, updated) values(%s,%s,%s,%s,%s,NOW());", $repo->name, $repo->description, $repo->url, $repo->html_url, $repo->owner->login));
     }
 
     public function get_pr_by_url($url)
     {
         global $wpdb;
-        return $wpdb->get_row("select * from {$this->pr_table} where url = '$url'");
+        return $wpdb->get_row($wpdb->prepare("select * from {$this->pr_table} where url = %s", $url));
     }
 
     public function add_pr($pr, $repo, $username)
@@ -205,7 +205,7 @@ class DB_Migrator
     public function prs_updated($username)
     {
         global $wpdb;
-        $wpdb->query("update {$this->user_table} set prs_updated=NOW() where username='$username';");
+        $wpdb->query($wpdb->prepare("update {$this->user_table} set prs_updated=NOW() where username=%s;", $username));
     }
 }
 
