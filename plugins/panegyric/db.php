@@ -110,10 +110,16 @@ class DB_Migrator
     public function get_prs($orgs, $users, $limit)
     {
         global $wpdb;
+        $sql = "SELECT username from {$this->user_table} WHERE FIND_IN_SET(org, '" . implode(",", $orgs) . "')";
+        $extra_users = $wpdb->get_col($sql);
+        $users = array_merge($users, $extra_users);
+
         $sql = "SELECT *, r.html_url as repo_url, pr.url as pr_url, r.name as repo_name
                 FROM {$this->pr_table} pr
                 JOIN {$this->repo_table} r on pr.repo = r.id
                 JOIN {$this->user_table} u on pr.user = u.username
+                WHERE FIND_IN_SET(u.username, '" . implode(",", $users) . "') AND
+                (NOT FIND_IN_SET(r.owner, '" . implode(",", array_merge($users, $orgs)) . "'))
                 ORDER BY pr.updated_at DESC
                 LIMIT $limit";
         return $wpdb->get_results($sql);
