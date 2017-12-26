@@ -3,7 +3,14 @@ Panegyric
 
 > _Panegyric_, n. a public speech or published text in praise of someone or something
 
-Panegyric is a plugin for displaying Github Pull Requests created by a list of organisations and/or users. It's main usage is for an organisation or user to show off all the cool stuff they've done for open source projects.
+Panegyric is a Wordpress plugin for displaying Github Pull Requests created by a list of organisations and/or users. It's main usage is for an organisation or user to show off all the cool stuff they've done for open source projects.
+
+Installation
+------------
+1. Check out this repository
+2. Zip up [plugins/panegyric](plugins/panegyric)
+3. Goto the "Plugins" page of your Wordpress instance, click "Add New", then "Upload Plugin".
+4. Choose the zip you made in Step 2 and click "Install Now". Activate it once installed.
 
 Usage
 -----
