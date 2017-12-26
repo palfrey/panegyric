@@ -17,7 +17,7 @@ Usage
 Simplest form is `[github_prs orgs="lshift"]` (replace `lshift` with your Github organisation name).
 
 Additional parameters are supported as follows:
-* `orgs`: Comma-separated list of organisations. Optional, but if you omit this and users, it won't do anything. Default is `""`
+* `orgs`: Comma-separated list of organisations. Optional, but if you omit this and `users`, it won't do anything. Default is `""`
 * `users`: Comma-separated list of users. Optional, but as per `orgs`, it's kinda recommended. Default is `""`.
 * `limit`: Number of Pull Requests to show. Default is 10.
 * `format`: Format of items. Default is `{$updated_at}: "<a href="{$pr_url}">{$pr_title}</a>" was done by <a href="{$user_url}">{$name}</a> for <a href="{$repo_url}">{$repo_name}</a>`. The various `${variables}` in the default format are all the ones supported currently.
@@ -28,7 +28,7 @@ The list of pull requests is determined as follows:
 3. For each user, get all their merged pull requests.
 4. List in reverse date order every Pull Request that's not in the user list or the `orgs` list. Stop when you hit the `limit`.
 
-These requests are done once per day (or when someone clicks the relevant date field on the admin page), via the magic of WP Cron (the standard Wordpress update mechanism)
+The data for these requests are updated once per day (or when someone clicks the relevant date field on the admin page), via the magic of WP Cron (the standard Wordpress update mechanism). You will need to manually update people when you first add them, but the plugin will bug you about that.
 
 Development
 -----------
