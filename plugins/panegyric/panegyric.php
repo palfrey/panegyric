@@ -96,9 +96,22 @@ function panegyric_shortcodes_init()
     }
     add_shortcode('github_prs', 'github_prs_func');
 }
+
+// This is needed because the shortcode code updates the orgs/users/pr table
+// With this function hooked in, those get updated on save, not view
+function panegyric_run_shortcode_publish($ID)
+{
+    $post = get_post($ID);
+    $content = $post->post_content;
+    if (has_shortcode($content, 'github_prs')) {
+        do_shortcode($content);
+    }
+}
+
 add_action('init', 'panegyric_shortcodes_init');
 add_action('admin_init', 'panegyric_setup_ajax');
 add_action('panegyric_update', 'panegyric_update');
+add_action('save_post', 'panegyric_run_shortcode_publish');
 
 define('PLUGIN_PATH', plugin_dir_path(__FILE__));
 include(PLUGIN_PATH . 'db.php');
