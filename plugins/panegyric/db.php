@@ -165,6 +165,12 @@ class DB_Migrator
         $wpdb->query($wpdb->prepare("update {$this->user_table} set updated=NOW(), status='not-found' where username=%s;", $username));
     }
 
+    public function user_denied($username)
+    {
+        global $wpdb;
+        $wpdb->query($wpdb->prepare("update {$this->user_table} set updated=NOW(), status='denied' where username=%s;", $username));
+    }
+
     public function delete_user($username)
     {
         global $wpdb;

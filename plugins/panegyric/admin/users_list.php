@@ -76,7 +76,7 @@ class Users_List_Table extends AJAX_List_Table
                     $obj = json_decode($json);
                     $db->set_user_name($id, $obj->name);
                 } else {
-                    print_r($info);
+                    $db->user_denied($id);
                 }
                 curl_close($ch);
                 break;
@@ -111,7 +111,7 @@ class Users_List_Table extends AJAX_List_Table
                     }
                     $db->prs_updated($id);
                 } else {
-                    print_r($info);
+                    $db->user_denied($id);
                 }
                 break;
             default:
