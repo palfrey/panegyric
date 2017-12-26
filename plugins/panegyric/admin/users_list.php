@@ -20,6 +20,7 @@ class Users_List_Table extends AJAX_List_Table
            'status'=>__('Status'),
            'updated'=>__('Updated'),
            'prs_updated'=>__('PRs Updated'),
+           'delete'=>__("Delete User")
         );
     }
 
@@ -45,6 +46,8 @@ class Users_List_Table extends AJAX_List_Table
                 $date = $item[ $column_name ] ?: "Never";
                 $kind = $column_name == 'updated' ? "user": "prs";
                 return "<a href=\"#\" class=\"$column_name-link\" data-kind=\"$kind\" data-id=\"{$item['username']}\">{$date}</a>";
+            case 'delete':
+                return "<a href=\"#\" class=\"$column_name-link\" data-kind=\"delete\" data-id=\"{$item['username']}\">Delete</a>";
             default:
                 return print_r($item, true); //Show the whole array for troubleshooting purposes
         }
@@ -58,6 +61,10 @@ class Users_List_Table extends AJAX_List_Table
     public function update_item($kind, $id)
     {
         switch ($kind) {
+            case 'delete':
+                $db = new DB_Migrator();
+                $db->delete_user($id);
+                break;
             case 'user':
                 $ch = $this->curl_get("https://api.github.com/users/$id");
                 $json = curl_exec($ch);

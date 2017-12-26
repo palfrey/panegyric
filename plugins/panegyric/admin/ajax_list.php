@@ -31,7 +31,7 @@ class AJAX_List_Table extends WP_List_Table
 
     public function no_items()
     {
-        _e('No '. strtolower($this->_args['singular']) .' found', 'sp');
+        _e('No '. strtolower($this->_args['plural']) .' found', 'sp');
     }
 
     public function record_count()

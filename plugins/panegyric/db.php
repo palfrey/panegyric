@@ -152,6 +152,18 @@ class DB_Migrator
         $wpdb->query("update {$this->user_table} set updated=NOW(), status='not-found' where username='$username';");
     }
 
+    public function delete_user($username)
+    {
+        global $wpdb;
+        $wpdb->query("delete from {$this->user_table} WHERE username='$username';");
+    }
+
+    public function delete_org($name)
+    {
+        global $wpdb;
+        $wpdb->query("delete from {$this->org_table} WHERE org='$name';");
+    }
+
     public function get_repo_by_url($url)
     {
         global $wpdb;

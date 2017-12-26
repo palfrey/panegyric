@@ -68,7 +68,7 @@ function list_ajax($short, $default_column)
                 }, delay);
             });
 
-            $('a.update-link,a.updated-link,a.prs_updated-link').on('click', function(e) {
+            $('a.update-link,a.updated-link,a.prs_updated-link,a.delete-link').on('click', function(e) {
                 var id = $(this).data('id');
                 var kind = $(this).data('kind');
                 var data = {

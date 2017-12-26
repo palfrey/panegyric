@@ -16,7 +16,8 @@ class Organisations_List_Table extends AJAX_List_Table
         return $columns= array(
            'org'=>__('Organisation'),
            'status'=>__('Status'),
-           'updated'=>__('Updated')
+           'updated'=>__('Updated'),
+           'delete'=>__("Delete Organisation")
         );
     }
 
@@ -38,6 +39,8 @@ class Organisations_List_Table extends AJAX_List_Table
             case 'updated':
                 $date = $item[ $column_name ] ?: "Never";
                 return "<a href=\"#\" class=\"update-link\" data-kind=\"org\" data-id=\"{$item['org']}\">{$date}</a>";
+            case 'delete':
+                return "<a href=\"#\" class=\"$column_name-link\" data-kind=\"delete\" data-id=\"{$item['org']}\">Delete</a>";
             default:
                 return print_r($item, true); // Show the whole array for troubleshooting purposes
         }
@@ -50,22 +53,30 @@ class Organisations_List_Table extends AJAX_List_Table
 
     public function update_item($kind, $org)
     {
-        $ch = $this->curl_get("https://api.github.com/orgs/${org}/members");
-        $json = curl_exec($ch);
-        $db = new DB_Migrator();
-        $info = curl_getinfo($ch);
-        if ($info['http_code'] == 404) {
-            $db->org_missing($org);
-        } elseif ($info['http_code'] == 200) {
-            $obj = json_decode($json);
-            $users = array();
-            foreach ($obj as $user) {
-                array_push($users, $user->login);
+        switch ($kind) {
+            case 'delete':
+                $db = new DB_Migrator();
+                $db->delete_org($org);
+                break;
+            case 'org':
+                $ch = $this->curl_get("https://api.github.com/orgs/${org}/members");
+                $json = curl_exec($ch);
+                $db = new DB_Migrator();
+                $info = curl_getinfo($ch);
+                if ($info['http_code'] == 404) {
+                    $db->org_missing($org);
+                } elseif ($info['http_code'] == 200) {
+                    $obj = json_decode($json);
+                    $users = array();
+                    foreach ($obj as $user) {
+                        array_push($users, $user->login);
+                    }
+                    $db->update_org($org, $users);
+                } else {
+                    print_r($info);
+                }
+                curl_close($ch);
+                break;
             }
-            $db->update_org($org, $users);
-        } else {
-            print_r($info);
-        }
-        curl_close($ch);
     }
 }
