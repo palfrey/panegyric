@@ -12,7 +12,7 @@ if (isset($_GET[ 'tab' ])) {
     $active_tab = "organisations";
 }
 
-function setup_ajax()
+function panegyric_setup_ajax()
 {
     // HACK: Workaround for "Undefined index: hook_suffix" in WP_Screen
     $GLOBALS['hook_suffix'] = '';
@@ -25,7 +25,7 @@ function setup_ajax()
     AJAX_List_Table::setup_ajax($classes);
 }
 
-function info_list()
+function panegyric_info_list()
 {
     global $active_tab?>
     <h1>Panegyric Admin</h1>
@@ -69,7 +69,7 @@ function info_list()
     }
 }
 
-function info_list_screen_options()
+function panegyric_info_list_screen_options()
 {
     $option = 'per_page';
     $args   = [

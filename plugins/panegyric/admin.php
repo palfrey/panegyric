@@ -42,7 +42,7 @@ class Panegyric_Admin_Plugin
     public function plugin_settings_page()
     {
         $action = isset($_GET['action']) ? $_GET['action'] : "";
-        info_list();
+        panegyric_info_list();
     }
 
     /**
@@ -51,7 +51,7 @@ class Panegyric_Admin_Plugin
     public function screen_option()
     {
         $action = isset($_GET['action']) ? $_GET['action'] : "";
-        info_list_screen_options();
+        panegyric_info_list_screen_options();
     }
 
     /** Singleton instance */
