@@ -115,7 +115,7 @@ add_action('save_post', 'panegyric_run_shortcode_publish');
 
 define('PLUGIN_PATH', plugin_dir_path(__FILE__));
 include(PLUGIN_PATH . 'db.php');
-include(PLUGIN_PATH . 'admin.php');
+include(PLUGIN_PATH . 'admin/admin.php');
 include(PLUGIN_PATH . 'admin/cron.php');
 
 function panegyric_activate()
