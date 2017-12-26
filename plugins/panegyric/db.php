@@ -125,6 +125,19 @@ class DB_Migrator
         return $wpdb->get_results($sql);
     }
 
+    public function no_updates($orgs, $users)
+    {
+        global $wpdb;
+        $sql = "SELECT username from {$this->user_table} WHERE (updated IS NULL OR prs_updated IS NULL) AND
+                (FIND_IN_SET(username, '" . implode(",", $users) . "') OR
+                FIND_IN_SET(org, '" . implode(",", $orgs) . "'))
+                UNION
+                SELECT org from {$this->org_table} WHERE updated IS NULL AND
+                FIND_IN_SET(org, '" . implode(",", $orgs) . "')";
+        $missing_users = $wpdb->get_col($sql);
+        return $missing_users;
+    }
+
     public function update_org($org, $users)
     {
         global $wpdb;

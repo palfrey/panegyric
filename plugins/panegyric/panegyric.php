@@ -76,13 +76,19 @@ function panegyric_shortcodes_init()
                 <a href="{$user_url}">{$name}</a> for <a href="{$repo_url}">{$repo_name}</a>';
         }
 
+        $outstr = "<ul>";
+        $missing = $db->no_updates($orgs, $users);
+        foreach ($missing as $m) {
+            $outstr .= "<li style=\"color: red;\">$m has never been updated. Please see 'Panegyric Admin' under 'Tools' in admin</li>";
+        }
+        $outstr .= "</ul>";
         $prs = $db->get_prs($orgs, $users, $limit);
-        $outstr = '<ul class="pangegyric-list">';
+        $outstr .= '<ul class="pangegyric-list">';
         foreach ($prs as $pr) {
             $outstr .= expand_vars(
                 "<li class=\"panegyric-item\">".$format."</li>",
                 array(
-                    "name" => $pr->name,
+                    "name" => $pr->name?:"",
                     "pr_title" => $pr->title,
                     "pr_url" => $pr->pr_url,
                     "repo_name" => $pr->repo_name,
