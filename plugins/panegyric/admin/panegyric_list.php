@@ -1,5 +1,5 @@
 <?php
-class AJAX_List_Table extends WP_List_Table
+class Panegyric_List_Table extends WP_List_Table
 {
     public static function setup_ajax($classes)
     {

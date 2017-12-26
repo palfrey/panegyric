@@ -22,7 +22,7 @@ function panegyric_setup_ajax()
         "users" => "Users_List_Table",
         "prs" => "PullRequests_List_Table"
     );
-    AJAX_List_Table::setup_ajax($classes);
+    Panegyric_List_Table::setup_ajax($classes);
 }
 
 function panegyric_info_list()

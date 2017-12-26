@@ -1,5 +1,5 @@
 <?php
-class Organisations_List_Table extends AJAX_List_Table
+class Organisations_List_Table extends Panegyric_List_Table
 {
     public function __construct()
     {
