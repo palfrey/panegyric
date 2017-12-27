@@ -121,9 +121,9 @@ add_action('panegyric_update', 'panegyric_update');
 add_action('save_post', 'panegyric_run_shortcode_publish');
 
 define('PANEGYRIC_PLUGIN_PATH', plugin_dir_path(__FILE__));
-include(PANEGYRIC_PLUGIN_PATH . 'db.php');
-include(PANEGYRIC_PLUGIN_PATH . 'admin/admin.php');
-include(PANEGYRIC_PLUGIN_PATH . 'admin/cron.php');
+include_once(PANEGYRIC_PLUGIN_PATH . 'db.php');
+include_once(PANEGYRIC_PLUGIN_PATH . 'admin/admin.php');
+include_once(PANEGYRIC_PLUGIN_PATH . 'admin/cron.php');
 
 function panegyric_activate()
 {

@@ -1,10 +1,10 @@
 <?php
 
-include(PANEGYRIC_PLUGIN_PATH . 'admin/ajax_list.php');
-include(PANEGYRIC_PLUGIN_PATH . 'admin/list_js.php');
-include(PANEGYRIC_PLUGIN_PATH . 'admin/org_list.php');
-include(PANEGYRIC_PLUGIN_PATH . 'admin/users_list.php');
-include(PANEGYRIC_PLUGIN_PATH . 'admin/prs_list.php');
+include_once(PANEGYRIC_PLUGIN_PATH . 'admin/panegyric_list.php');
+include_once(PANEGYRIC_PLUGIN_PATH . 'admin/list_js.php');
+include_once(PANEGYRIC_PLUGIN_PATH . 'admin/org_list.php');
+include_once(PANEGYRIC_PLUGIN_PATH . 'admin/users_list.php');
+include_once(PANEGYRIC_PLUGIN_PATH . 'admin/prs_list.php');
 
 if (isset($_GET[ 'tab' ])) {
     $active_tab = $_GET[ 'tab' ];

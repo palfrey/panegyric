@@ -4,7 +4,7 @@ if (!class_exists('WP_List_Table')) {
     require_once(ABSPATH . 'wp-admin/includes/class-wp-list-table.php');
 }
 
-include(PANEGYRIC_PLUGIN_PATH . 'admin/info_list.php');
+include_once(PANEGYRIC_PLUGIN_PATH . 'admin/info_list.php');
 
 class Panegyric_Admin_Plugin
 {
