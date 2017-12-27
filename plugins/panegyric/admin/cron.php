@@ -4,11 +4,12 @@ function panegyric_update()
     global $wpdb;
     $day_ago = new DateTime();
     $day_ago = $day_ago->sub(new DateInterval("P1D"));
+    $beginning = new DateTime("@1");
 
     $org_table = new Panegyric_Organisations_List_Table();
     $orgs = $wpdb->get_results("select org, updated from {$wpdb->prefix}panegyric_org");
     foreach ($orgs as $org) {
-        $when = DateTime::createFromFormat('Y-m-d H:i:s', $org->updated);
+        $when = $org->updated ? DateTime::createFromFormat('Y-m-d H:i:s', $org->updated) : $beginning;
         if ($when > $day_ago) {
             error_log("{$org->org} is sufficiently up to date");
             continue;
@@ -20,7 +21,7 @@ function panegyric_update()
     $users_table = new Panegyric_Users_List_Table();
     $users = $wpdb->get_results("select username, updated, prs_updated from {$wpdb->prefix}panegyric_users");
     foreach ($users as $user) {
-        $when = DateTime::createFromFormat('Y-m-d H:i:s', $user->updated);
+        $when = $user->updated ? DateTime::createFromFormat('Y-m-d H:i:s', $user->updated) : $beginning;
         if ($when > $day_ago) {
             error_log("{$user->username} is sufficiently up to date");
         } else {
@@ -28,7 +29,7 @@ function panegyric_update()
             $users_table->update_item('user', $user->username);
         }
 
-        $when = DateTime::createFromFormat('Y-m-d H:i:s', $user->prs_updated);
+        $when = $user->prs_updated ? DateTime::createFromFormat('Y-m-d H:i:s', $user->prs_updated) : $beginning;
         if ($when > $day_ago) {
             error_log("{$user->username}'s PRs are sufficiently up to date");
         } else {
