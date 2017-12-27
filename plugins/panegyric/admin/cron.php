@@ -5,7 +5,7 @@ function panegyric_update()
     $day_ago = new DateTime();
     $day_ago = $day_ago->sub(new DateInterval("P1D"));
 
-    $org_table = new Organisations_List_Table();
+    $org_table = new Panegyric_Organisations_List_Table();
     $orgs = $wpdb->get_results("select org, updated from {$wpdb->prefix}panegyric_org");
     foreach ($orgs as $org) {
         $when = DateTime::createFromFormat('Y-m-d H:i:s', $org->updated);
@@ -17,7 +17,7 @@ function panegyric_update()
         $org_table->update_item('org', $org->org);
     }
 
-    $users_table = new Users_List_Table();
+    $users_table = new Panegyric_Users_List_Table();
     $users = $wpdb->get_results("select username, updated, prs_updated from {$wpdb->prefix}panegyric_users");
     foreach ($users as $user) {
         $when = DateTime::createFromFormat('Y-m-d H:i:s', $user->updated);

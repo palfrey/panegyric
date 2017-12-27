@@ -16,14 +16,14 @@ Author URI: https://tevp.net
 // ini_set('display_errors', 'On');
 // error_reporting(E_ALL);
 
-function comma_split($instr)
+function panegyric_comma_split($instr)
 {
     // using strlen trick from http://php.net/manual/en/function.explode.php#111650
     return array_filter(explode(",", $instr), 'strlen');
 }
 
 // based off https://bugs.php.net/bug.php?id=43901
-function expand_vars($str, $locals)
+function panegyric_expand_vars($str, $locals)
 {
     while (true) {
         $res=preg_replace_callback(
@@ -47,9 +47,9 @@ function panegyric_shortcodes_init()
 {
     function github_prs_func($atts)
     {
-        $db = new DB_Migrator();
+        $db = new Panegyric_DB_Migrator();
         if (array_key_exists("orgs", $atts)) {
-            $orgs = comma_split($atts["orgs"]);
+            $orgs = panegyric_comma_split($atts["orgs"]);
             foreach ($orgs as $org) {
                 $db->create_org($org);
             }
@@ -57,7 +57,7 @@ function panegyric_shortcodes_init()
             $orgs = array();
         }
         if (array_key_exists("users", $atts)) {
-            $users = comma_split($atts["users"]);
+            $users = panegyric_comma_split($atts["users"]);
             foreach ($users as $user) {
                 $db->create_user($user);
             }
@@ -86,7 +86,7 @@ function panegyric_shortcodes_init()
         $prs = $db->get_prs($orgs, $users, $limit);
         $outstr .= '<ul class="pangegyric-list">';
         foreach ($prs as $pr) {
-            $outstr .= expand_vars(
+            $outstr .= panegyric_expand_vars(
                 "<li class=\"panegyric-item\">".$format."</li>",
                 array(
                     "name" => $pr->name?:"",

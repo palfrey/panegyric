@@ -1,5 +1,5 @@
 <?php
-class Organisations_List_Table extends Panegyric_List_Table
+class Panegyric_Organisations_List_Table extends Panegyric_List_Table
 {
     public function __construct()
     {
@@ -55,13 +55,13 @@ class Organisations_List_Table extends Panegyric_List_Table
     {
         switch ($kind) {
             case 'delete':
-                $db = new DB_Migrator();
+                $db = new Panegyric_DB_Migrator();
                 $db->delete_org($org);
                 break;
             case 'org':
                 $ch = $this->curl_get("https://api.github.com/orgs/${org}/members");
                 $json = curl_exec($ch);
-                $db = new DB_Migrator();
+                $db = new Panegyric_DB_Migrator();
                 $info = curl_getinfo($ch);
                 if ($info['http_code'] == 404) {
                     $db->org_missing($org);

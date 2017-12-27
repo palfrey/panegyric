@@ -1,5 +1,5 @@
 <?php
-class PullRequests_List_Table extends Panegyric_List_Table
+class Panegyric_PullRequests_List_Table extends Panegyric_List_Table
 {
     public function __construct()
     {

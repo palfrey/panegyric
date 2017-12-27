@@ -1,5 +1,5 @@
 <?php
-class Users_List_Table extends Panegyric_List_Table
+class Panegyric_Users_List_Table extends Panegyric_List_Table
 {
     public function __construct()
     {
@@ -62,13 +62,13 @@ class Users_List_Table extends Panegyric_List_Table
     {
         switch ($kind) {
             case 'delete':
-                $db = new DB_Migrator();
+                $db = new Panegyric_DB_Migrator();
                 $db->delete_user($id);
                 break;
             case 'user':
                 $ch = $this->curl_get("https://api.github.com/users/$id");
                 $json = curl_exec($ch);
-                $db = new DB_Migrator();
+                $db = new Panegyric_DB_Migrator();
                 $info = curl_getinfo($ch);
                 if ($info['http_code'] == 404) {
                     $db->user_missing($id);
@@ -86,7 +86,7 @@ class Users_List_Table extends Panegyric_List_Table
                 $ch = $this->curl_get("https://api.github.com/search/issues?&q=$query&sort=created&order=desc");
                 $json = curl_exec($ch);
                 $info = curl_getinfo($ch);
-                $db = new DB_Migrator();
+                $db = new Panegyric_DB_Migrator();
                 if ($info['http_code'] == 200) {
                     $obj = json_decode($json);
                     foreach ($obj->items as $pr) {

@@ -1,6 +1,6 @@
 <?php
 
-class DB_Migrator
+class Panegyric_DB_Migrator
 {
     const db_version = '1.0';
 
@@ -217,6 +217,6 @@ class DB_Migrator
 
 function panegyric_table_install()
 {
-    $db = new DB_Migrator();
+    $db = new Panegyric_DB_Migrator();
     $db->table_install();
 }

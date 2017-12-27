@@ -1,5 +1,5 @@
 <?php
-function list_ajax($short, $default_column)
+function panegyric_list_ajax($short, $default_column)
 {
     // based off of https://blog.caercam.org/2014/04/03/a-way-to-implement-ajax-in-wp_list_table/
     $jscript = <<< EOT

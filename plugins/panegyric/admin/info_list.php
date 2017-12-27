@@ -18,9 +18,9 @@ function panegyric_setup_ajax()
     $GLOBALS['hook_suffix'] = '';
 
     $classes = array(
-        "organisation" => "Organisations_List_Table",
-        "users" => "Users_List_Table",
-        "prs" => "PullRequests_List_Table"
+        "organisation" => "Panegyric_Organisations_List_Table",
+        "users" => "Panegyric_Users_List_Table",
+        "prs" => "Panegyric_PullRequests_List_Table"
     );
     Panegyric_List_Table::setup_ajax($classes);
 }
@@ -41,29 +41,29 @@ function panegyric_info_list()
         ?>
         <h3>Organisations</h3>
         <?php
-        $org_table = new Organisations_List_Table();
+        $org_table = new Panegyric_Organisations_List_Table();
         $org_table->prepare_items();
         $org_table->display(); ?>
         <script language="javascript">
-            <?= list_ajax("organisation", "org"); ?>
+            <?= panegyric_list_ajax("organisation", "org"); ?>
         </script>
         <?php
     } elseif ($active_tab == 'users') {
         ?>
         <h3>Users</h3>
         <?php
-        $users_table = new Users_List_Table();
+        $users_table = new Panegyric_Users_List_Table();
         $users_table->prepare_items();
         $users_table->display(); ?>
         <script language="javascript">
-            <?= list_ajax("users", "user"); ?>
+            <?= panegyric_list_ajax("users", "user"); ?>
         </script>
         <?php
     } elseif ($active_tab == 'prs') {
         ?>
         <h3>Users</h3>
         <?php
-        $prs_table = new PullRequests_List_Table();
+        $prs_table = new Panegyric_PullRequests_List_Table();
         $prs_table->prepare_items();
         $prs_table->display();
     }
