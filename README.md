@@ -51,3 +51,11 @@ Because of an [upstream bug](https://github.com/docker-library/wordpress/issues/
 2. In that new session, run `apt-get update && apt-get install -y vim`
 3. Then `vim /var/www/html/wp-config.php`
 4. Add `define('WP_DEBUG', true);` to the bottom of that page
+
+SVN
+---
+
+1. Checkout the SVN repo with `svn co https://plugins.svn.wordpress.org/panegyric svn`
+2. Run `./deploy-to-svn.sh trunk` or `./deploy-to-svn.sh tags/<VERSION>` to add files to SVN folder
+
+Most everything else is following https://developer.wordpress.org/plugins/wordpress-org/how-to-use-subversion/
