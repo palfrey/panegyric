@@ -7,6 +7,10 @@ Panegyric is a Wordpress plugin for displaying Github Pull Requests created by a
 
 Installation
 ------------
+1. Follow the [automatic plugin installation instructions](https://codex.wordpress.org/Managing_Plugins#Installing_Plugins), searching for "panegyric"
+
+Manual Installation
+-------------------
 1. Check out this repository
 2. Zip up [plugins/panegyric](plugins/panegyric)
 3. Goto the "Plugins" page of your Wordpress instance, click "Add New", then "Upload Plugin".
