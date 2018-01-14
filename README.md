@@ -34,6 +34,8 @@ The list of pull requests is determined as follows:
 
 The data for these requests are updated once per day (or when someone clicks the relevant date field on the admin page), via the magic of WP Cron (the standard Wordpress update mechanism). You will need to manually update people when you first add them, but the plugin will bug you about that.
 
+Lists have the CSS class `pangegyric-list` and the items have the class `panegyric-item`
+
 Development
 -----------
 
