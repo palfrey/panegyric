@@ -24,6 +24,8 @@ Additional parameters are supported as follows:
 * `limit`: Number of Pull Requests to show. Default is 10.
 * `format`: Format of items. Default is `{$updated_at}: "<a href="{$pr_url}">{$pr_title}</a>" was done by <a href="{$user_url}">{$name}</a> for <a href="{$repo_url}">{$repo_name}</a>`. The various `${variables}` in the default format are all the ones supported currently.
 
+For `format`, if you want to include `"` characters, you should write it with single quotes on the outside, and not do escaping. This is actually [a Wordpress problem](https://core.trac.wordpress.org/ticket/15434), but it doesn't unfortunately do a nice error message, it just fails!
+
 The list of pull requests is determined as follows:
 
 1. For every organisation, get all their public users.
