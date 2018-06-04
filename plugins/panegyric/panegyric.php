@@ -84,7 +84,7 @@ function panegyric_shortcodes_init()
         }
         $outstr .= "</ul>";
         $prs = $db->get_prs($orgs, $users, $limit);
-        $outstr .= '<ul class="pangegyric-list">';
+        $outstr .= '<ul class="panegyric-list">';
         foreach ($prs as $pr) {
             $outstr .= panegyric_expand_vars(
                 "<li class=\"panegyric-item\">".$format."</li>",
