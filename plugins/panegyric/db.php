@@ -144,6 +144,13 @@ class Panegyric_DB_Migrator
         foreach ($users as $user) {
             $this->create_user($user, $org);
         }
+        $sql = $wpdb->prepare("SELECT username from {$this->user_table} where org=%s;", $org);
+        $all_users = $wpdb->get_col($sql);
+        foreach ($all_users as $user) {
+            if (!in_array($user, $users)) {
+                $this->delete_user($user);
+            }
+        }
         $wpdb->query($wpdb->prepare("update {$this->org_table} set updated=NOW(), status='success' where org=%s;", $org));
     }
 
