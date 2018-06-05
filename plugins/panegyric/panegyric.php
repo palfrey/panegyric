@@ -1,14 +1,14 @@
 <?php
 /**
  * @package Panegyric
- * @version 1.0
+ * @version 1.1
  */
 /*
 Plugin Name: Panegyric
 Plugin URI: http://wordpress.org/plugins/panegyric/
 Description: Plugin for displaying Github Pull Requests from users and organisations
 Author: Tom Parker
-Version: 1.0
+Version: 1.1
 Author URI: https://tevp.net
 */
 
