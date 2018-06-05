@@ -49,5 +49,9 @@ At [https://github.com/palfrey/panegyric](https://github.com/palfrey/panegyric)
 
 == Changelog ==
 
+= 1.1 =
+* Remove users that aren't in an organisation any more
+* Fix spelling of panegyric in the item list
+
 = 1.0 =
 * Initial version
