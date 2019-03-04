@@ -66,28 +66,27 @@ class Panegyric_Users_List_Table extends Panegyric_List_Table
                 $db->delete_user($id);
                 break;
             case 'user':
-                $ch = $this->curl_get("https://api.github.com/users/$id");
-                $json = curl_exec($ch);
+                $response = wp_remote_get("https://api.github.com/users/$id");
                 $db = new Panegyric_DB_Migrator();
-                $info = curl_getinfo($ch);
-                if ($info['http_code'] == 404) {
+                $http_code = wp_remote_retrieve_response_code($response);
+                if ($http_code == 404) {
                     $db->user_missing($id);
-                } elseif ($info['http_code'] == 200) {
+                } elseif ($http_code == 200) {
+                    $json = wp_remote_retrieve_body($response);
                     $obj = json_decode($json);
                     $db->set_user_name($id, $obj->name);
                 } else {
                     $db->user_denied($id);
                 }
-                curl_close($ch);
                 break;
             case 'prs':
                 $query = "is:pr author:$id is:public -user:$id is:merged";
                 $query = str_replace(" ", "+", $query);
-                $ch = $this->curl_get("https://api.github.com/search/issues?&q=$query&sort=created&order=desc");
-                $json = curl_exec($ch);
-                $info = curl_getinfo($ch);
+                $response = wp_remote_get("https://api.github.com/search/issues?&q=$query&sort=created&order=desc");
+                $http_code = wp_remote_retrieve_response_code($response);
                 $db = new Panegyric_DB_Migrator();
-                if ($info['http_code'] == 200) {
+                if ($http_code == 200) {
+                    $json = wp_remote_retrieve_body($ch);
                     $obj = json_decode($json);
                     foreach ($obj->items as $pr) {
                         if ($db->get_pr_by_url($pr->html_url) != null) {
@@ -95,15 +94,15 @@ class Panegyric_Users_List_Table extends Panegyric_List_Table
                         }
                         $repo = $db->get_repo_by_url($pr->repository_url);
                         if ($repo == null) {
-                            $rch = $this->curl_get($pr->repository_url);
-                            $rjson = curl_exec($rch);
-                            $rinfo = curl_getinfo($rch);
-                            if ($rinfo['http_code'] == 200) {
+                            $rch = wp_remote_get($pr->repository_url);
+                            $rhttp_code = wp_remote_retrieve_response_code($rch);
+                            if ($rhttp_code == 200) {
+                                $rjson = wp_remote_retrieve_body($rch);
                                 $db->add_repo(json_decode($rjson));
                                 $repo = $db->get_repo_by_url($pr->repository_url);
                             } else {
                                 print("Repo get failure for {$pr->repository_url}");
-                                print_r($rinfo);
+                                print_r($rch);
                                 continue;
                             }
                         }

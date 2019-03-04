@@ -59,13 +59,13 @@ class Panegyric_Organisations_List_Table extends Panegyric_List_Table
                 $db->delete_org($org);
                 break;
             case 'org':
-                $ch = $this->curl_get("https://api.github.com/orgs/${org}/members");
-                $json = curl_exec($ch);
+                $response = wp_remote_get("https://api.github.com/orgs/${org}/members");
                 $db = new Panegyric_DB_Migrator();
-                $info = curl_getinfo($ch);
-                if ($info['http_code'] == 404) {
+                $http_code = wp_remote_retrieve_response_code($response);
+                if ($http_code == 404) {
                     $db->org_missing($org);
-                } elseif ($info['http_code'] == 200) {
+                } elseif ($http_code == 200) {
+                    $json = wp_remote_retrieve_body($response);
                     $obj = json_decode($json);
                     $users = array();
                     foreach ($obj as $user) {
@@ -75,7 +75,6 @@ class Panegyric_Organisations_List_Table extends Panegyric_List_Table
                 } else {
                     print_r($info);
                 }
-                curl_close($ch);
                 break;
             }
     }
