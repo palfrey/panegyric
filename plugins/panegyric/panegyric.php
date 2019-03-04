@@ -89,7 +89,7 @@ function panegyric_shortcodes_init()
             $outstr .= panegyric_expand_vars(
                 "<li class=\"panegyric-item\">".$format."</li>",
                 array(
-                    "name" => $pr->name?:"",
+                    "name" => $pr->name?:$pr->username,
                     "pr_title" => $pr->title,
                     "pr_url" => $pr->pr_url,
                     "repo_name" => $pr->repo_name,

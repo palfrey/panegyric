@@ -114,7 +114,7 @@ class Panegyric_DB_Migrator
         $extra_users = $wpdb->get_col($sql);
         $users = array_merge($users, $extra_users);
 
-        $sql = $wpdb->prepare("SELECT *, r.html_url as repo_url, pr.url as pr_url, r.name as repo_name
+        $sql = $wpdb->prepare("SELECT *, r.html_url as repo_url, pr.url as pr_url, r.name as repo_name, u.username as username
                 FROM {$this->pr_table} pr
                 JOIN {$this->repo_table} r on pr.repo = r.id
                 JOIN {$this->user_table} u on pr.user = u.username
