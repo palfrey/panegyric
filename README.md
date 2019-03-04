@@ -49,13 +49,6 @@ You can do manual Wordpress development in other ways, but here's a sensible way
 4. Goto [http://localhost:8080/wp-admin/plugins.php](http://localhost:8080/wp-admin/plugins.php) and click "activate" on Panegyric
 5. Goto [http://localhost:8080/wp-admin/edit.php](http://localhost:8080/wp-admin/edit.php) and edit the "Hello World" page. Try adding `[github_prs orgs="lshift"]` to the page, saving then going to the "Panegyric Admin" tab under "Tools"
 
-Because of an [upstream bug](https://github.com/docker-library/wordpress/issues/200) you should probably enable Wordpress debug manually as follows.
-
-1. In a new terminal (not the one running `docker-compose up`), run `docker-compose exec wordpress bash`
-2. In that new session, run `apt-get update && apt-get install -y vim`
-3. Then `vim /var/www/html/wp-config.php`
-4. Add `define('WP_DEBUG', true);` to the bottom of that page
-
 SVN
 ---
 

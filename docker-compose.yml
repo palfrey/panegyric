@@ -2,11 +2,14 @@ version: '3.1'
 
 services:
   wordpress:
-    image: wordpress:4.9.0
+    image: wordpress:4.9.7
     ports:
       - 8080:80
     environment:
       WORDPRESS_DB_PASSWORD: example
+      WORDPRESS_CONFIG_EXTRA: |
+        define('WP_DEBUG', true);
+        define('WP_DEBUG_DISPLAY', false);
     depends_on:
       - mysql
     volumes:
