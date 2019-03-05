@@ -85,15 +85,12 @@ class Panegyric_List_Table extends WP_List_Table
     {
         check_ajax_referer('ajax-custom-list-nonce', '_ajax_custom_list_nonce');
 
-        ob_start();
-
         if (! empty($_REQUEST['update_id'])) {
             $this->update_item($_REQUEST['update_kind'], $_REQUEST['update_id']);
         }
-        $this->prepare_items();
 
-        extract($this->_args);
-        extract($this->_pagination_args, EXTR_SKIP);
+        $this->prepare_items();
+        ob_start();
 
         if (! empty($_REQUEST['no_placeholder'])) {
             $this->display_rows();
