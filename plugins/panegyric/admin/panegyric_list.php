@@ -116,15 +116,15 @@ class Panegyric_List_Table extends WP_List_Table
         $response['pagination']['bottom'] = $pagination_bottom;
         $response['column_headers'] = $headers;
 
-        if ( isset( $this->_pagination_args['total_items'] ) ) {
+        if (isset($this->_pagination_args['total_items'])) {
             $response['total_items_i18n'] = sprintf(
-                    _n( '%s item', '%s items', $this->_pagination_args['total_items'] ),
-                    number_format_i18n( $this->_pagination_args['total_items'] )
+                    _n('%s item', '%s items', $this->_pagination_args['total_items']),
+                    number_format_i18n($this->_pagination_args['total_items'])
             );
         }
-        if ( isset( $this->_pagination_args['total_pages'] ) ) {
+        if (isset($this->_pagination_args['total_pages'])) {
             $response['total_pages']      = $this->_pagination_args['total_pages'];
-            $response['total_pages_i18n'] = number_format_i18n( $this->_pagination_args['total_pages'] );
+            $response['total_pages_i18n'] = number_format_i18n($this->_pagination_args['total_pages']);
         }
 
         die(wp_json_encode($response));

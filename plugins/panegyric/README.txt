@@ -4,7 +4,7 @@ Tags: github
 Requires PHP: 5.6
 Requires at least: 4.9
 Tested up to: 5.1
-Stable tag: 1.1
+Stable tag: 1.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -48,6 +48,14 @@ Lists have the CSS class `panegyric-list` and the items have the class `panegyri
 At [https://github.com/palfrey/panegyric](https://github.com/palfrey/panegyric)
 
 == Changelog ==
+
+= 1.2 =
+* Fix table pagination (#14)
+* Use Wordpress HTTP, not Curl (#18)
+* Test with Wordpress 5 (#16)
+* Default to using usernames if we don't have an actual name for a user (#15)
+* Replace "never" entries in lists with "(Click to update)" (#12)
+* Only require PRs to be updated before not complaining (#11)
 
 = 1.1 =
 * Remove users that aren't in an organisation any more
