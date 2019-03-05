@@ -83,10 +83,11 @@ class Panegyric_Users_List_Table extends Panegyric_List_Table
                 $query = "is:pr author:$id is:public -user:$id is:merged";
                 $query = str_replace(" ", "+", $query);
                 $response = wp_remote_get("https://api.github.com/search/issues?&q=$query&sort=created&order=desc");
-                $http_code = wp_remote_retrieve_response_code($response);
                 $db = new Panegyric_DB_Migrator();
-                if ($http_code == 200) {
-                    $json = wp_remote_retrieve_body($ch);
+                if (is_wp_error($response)) {
+                    $db->user_denied($id);
+                } else {
+                    $json = wp_remote_retrieve_body($response);
                     $obj = json_decode($json);
                     foreach ($obj->items as $pr) {
                         if ($db->get_pr_by_url($pr->html_url) != null) {
@@ -109,8 +110,6 @@ class Panegyric_Users_List_Table extends Panegyric_List_Table
                         $db->add_pr($pr, $repo, $id);
                     }
                     $db->prs_updated($id);
-                } else {
-                    $db->user_denied($id);
                 }
                 break;
             default:

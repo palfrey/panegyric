@@ -61,10 +61,9 @@ class Panegyric_Organisations_List_Table extends Panegyric_List_Table
             case 'org':
                 $response = wp_remote_get("https://api.github.com/orgs/${org}/members");
                 $db = new Panegyric_DB_Migrator();
-                $http_code = wp_remote_retrieve_response_code($response);
-                if ($http_code == 404) {
+                if (is_wp_error($response)) {
                     $db->org_missing($org);
-                } elseif ($http_code == 200) {
+                } else {
                     $json = wp_remote_retrieve_body($response);
                     $obj = json_decode($json);
                     $users = array();
@@ -72,8 +71,6 @@ class Panegyric_Organisations_List_Table extends Panegyric_List_Table
                         array_push($users, $user->login);
                     }
                     $db->update_org($org, $users);
-                } else {
-                    print_r($info);
                 }
                 break;
             }
