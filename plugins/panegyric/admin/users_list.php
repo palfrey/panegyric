@@ -43,7 +43,7 @@ class Panegyric_Users_List_Table extends Panegyric_List_Table
                 return $item[ $column_name ];
             case 'updated':
             case 'prs_updated':
-                $date = $item[ $column_name ] ?: "Never";
+                $date = $item[ $column_name ] ?: "(Click to update)";
                 $kind = $column_name == 'updated' ? "user": "prs";
                 return "<a href=\"#\" class=\"$column_name-link\" data-kind=\"$kind\" data-id=\"{$item['username']}\">{$date}</a>";
             case 'delete':

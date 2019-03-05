@@ -37,7 +37,7 @@ class Panegyric_Organisations_List_Table extends Panegyric_List_Table
             case 'status':
                 return $item[ $column_name ];
             case 'updated':
-                $date = $item[ $column_name ] ?: "Never";
+                $date = $item[ $column_name ] ?: "(Click to update)";
                 return "<a href=\"#\" class=\"update-link\" data-kind=\"org\" data-id=\"{$item['org']}\">{$date}</a>";
             case 'delete':
                 return "<a href=\"#\" class=\"$column_name-link\" data-kind=\"delete\" data-id=\"{$item['org']}\">Delete</a>";
