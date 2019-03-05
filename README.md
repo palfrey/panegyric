@@ -53,6 +53,6 @@ SVN
 ---
 
 1. Checkout the SVN repo with `svn co https://plugins.svn.wordpress.org/panegyric svn`
-2. Run `./deploy-to-svn.sh trunk` or `./deploy-to-svn.sh tags/<VERSION>` to add files to SVN folder
+2. Run `./deploy-to-svn.sh` or `BRANCH=tags/<VERSION> ./deploy-to-svn.sh` to add files to SVN folder
 
 Most everything else is following https://developer.wordpress.org/plugins/wordpress-org/how-to-use-subversion/
