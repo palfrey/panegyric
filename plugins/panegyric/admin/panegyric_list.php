@@ -50,6 +50,14 @@ class Panegyric_List_Table extends WP_List_Table
             $sql .= ' ORDER BY ' . esc_sql($_REQUEST['orderby']);
             $sql .= ! empty($_REQUEST['order']) ? ' ' . esc_sql($_REQUEST['order']) : ' ASC';
         }
+        $current_page = $this->get_pagenum();
+        $per_page = $this->get_pagination_arg("per_page");
+        if (! empty($per_page)) {
+            $sql .= ' LIMIT ' . $per_page;
+            if (! empty($current_page) && $current_page != 1) {
+                $sql .= ' OFFSET ' . ($per_page * ($current_page - 1));
+            }
+        }
 
         return $wpdb->get_results($sql, 'ARRAY_A');
     }
@@ -60,7 +68,7 @@ class Panegyric_List_Table extends WP_List_Table
         $hidden = array();
         $sortable = $this->get_sortable_columns();
         $this->_column_headers = array($columns, $hidden, $sortable);
-        $per_page     = $this->get_items_per_page(strtolower($this->_args['plural']) . '_per_page', 5);
+        $per_page     = $this->get_items_per_page(strtolower($this->_args['plural']) . '_per_page', 10);
         $current_page = $this->get_pagenum();
         $total_items  = $this->record_count();
 
@@ -111,15 +119,17 @@ class Panegyric_List_Table extends WP_List_Table
         $response['pagination']['bottom'] = $pagination_bottom;
         $response['column_headers'] = $headers;
 
-        if (isset($total_items)) {
-            $response['total_items_i18n'] = sprintf(_n('1 item', '%s items', $total_items), number_format_i18n($total_items));
+        if ( isset( $this->_pagination_args['total_items'] ) ) {
+            $response['total_items_i18n'] = sprintf(
+                    _n( '%s item', '%s items', $this->_pagination_args['total_items'] ),
+                    number_format_i18n( $this->_pagination_args['total_items'] )
+            );
+        }
+        if ( isset( $this->_pagination_args['total_pages'] ) ) {
+            $response['total_pages']      = $this->_pagination_args['total_pages'];
+            $response['total_pages_i18n'] = number_format_i18n( $this->_pagination_args['total_pages'] );
         }
 
-        if (isset($total_pages)) {
-            $response['total_pages'] = $total_pages;
-            $response['total_pages_i18n'] = number_format_i18n($total_pages);
-        }
-
-        die(json_encode($response));
+        die(wp_json_encode($response));
     }
 }

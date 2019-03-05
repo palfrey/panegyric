@@ -41,6 +41,15 @@ class Panegyric_PullRequests_List_Table extends Panegyric_List_Table
             $sql .= ! empty($_REQUEST['order']) ? ' ' . esc_sql($_REQUEST['order']) : ' ASC';
         }
 
+        $current_page = $this->get_pagenum();
+        $per_page = $this->get_pagination_arg("per_page");
+        if (! empty($per_page)) {
+            $sql .= ' LIMIT ' . $per_page;
+            if (! empty($current_page) && $current_page != 1) {
+                $sql .= ' OFFSET ' . ($per_page * ($current_page - 1));
+            }
+        }
+
         return $wpdb->get_results($sql, 'ARRAY_A');
     }
 
