@@ -128,7 +128,7 @@ class Panegyric_DB_Migrator
     public function no_updates($orgs, $users)
     {
         global $wpdb;
-        $sql = $wpdb->prepare("SELECT username from {$this->user_table} WHERE (updated IS NULL OR prs_updated IS NULL) AND
+        $sql = $wpdb->prepare("SELECT username from {$this->user_table} WHERE prs_updated IS NULL AND
                 (FIND_IN_SET(username, %s) OR
                 FIND_IN_SET(org, %s))
                 UNION
