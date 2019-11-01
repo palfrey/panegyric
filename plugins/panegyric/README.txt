@@ -49,6 +49,9 @@ At [https://github.com/palfrey/panegyric](https://github.com/palfrey/panegyric)
 
 == Changelog ==
 
+= 1.3 =
+* Order PR grabbing by updated date, not created (#21)
+
 = 1.2 =
 * Fix table pagination (#14)
 * Use Wordpress HTTP, not Curl (#18)
