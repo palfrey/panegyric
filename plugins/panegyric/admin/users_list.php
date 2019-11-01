@@ -82,7 +82,7 @@ class Panegyric_Users_List_Table extends Panegyric_List_Table
             case 'prs':
                 $query = "is:pr author:$id is:public -user:$id is:merged";
                 $query = str_replace(" ", "+", $query);
-                $response = wp_remote_get("https://api.github.com/search/issues?&q=$query&sort=created&order=desc");
+                $response = wp_remote_get("https://api.github.com/search/issues?&q=$query&sort=updated&order=desc");
                 $db = new Panegyric_DB_Migrator();
                 if (is_wp_error($response)) {
                     $db->user_denied($id);
