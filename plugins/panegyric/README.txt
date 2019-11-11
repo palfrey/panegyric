@@ -4,7 +4,7 @@ Tags: github
 Requires PHP: 5.6
 Requires at least: 4.9
 Tested up to: 5.1
-Stable tag: 1.3
+Stable tag: 1.3.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -48,6 +48,9 @@ Lists have the CSS class `panegyric-list` and the items have the class `panegyri
 At [https://github.com/palfrey/panegyric](https://github.com/palfrey/panegyric)
 
 == Changelog ==
+
+= 1.3.1 =
+* PR dates are "closed_at" not "updated_at" in line with PR merge times (#22)
 
 = 1.3 =
 * Order PR grabbing by updated date, not created (#21)
