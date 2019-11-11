@@ -211,7 +211,9 @@ class Panegyric_DB_Migrator
     public function add_pr($pr, $repo, $username)
     {
         global $wpdb;
-        $updated_at = DateTime::createFromFormat(DateTime::ATOM, $pr->updated_at);
+        // Note that we read from "closed_at" (see https://github.com/palfrey/panegyric/issues/22)
+        // but write to updated_at for historical reasons (not breaking old formatting usage)
+        $updated_at = DateTime::createFromFormat(DateTime::ATOM, $pr->closed_at);
         $wpdb->query($wpdb->prepare("insert into {$this->pr_table} (url, user, repo, title, updated_at) values(%s, %s, %d, %s, FROM_UNIXTIME(%d))", $pr->html_url, $username, $repo->id, $pr->title, $updated_at->getTimestamp()));
     }
 
