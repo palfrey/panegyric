@@ -7,9 +7,9 @@
 Plugin Name: Panegyric
 Plugin URI: http://wordpress.org/plugins/panegyric/
 Description: Plugin for displaying Github Pull Requests from users and organisations
-Author: Tom Parker
+Author: Tom Parker-Shemilt
 Version: 1.3.1
-Author URI: https://tevp.net
+Author URI: https://tevps.net
 */
 
 // Only set this during debugging, not deploy
